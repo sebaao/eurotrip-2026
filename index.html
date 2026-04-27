@@ -3,19 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Planificador Maestro de Viajes v11.0 - UX & Logistics</title>
+    <title>Planificador Maestro de Viajes v12.0 - UX & Logistics</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        .status-badge { font-size: 0.6rem; padding: 1px 4px; border-radius: 3px; cursor: pointer; }
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom: 3px solid #3b82f6; color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .day-row { border-bottom: 1px solid #1e293b; transition: background 0.2s; }
+        .day-row:hover { background: rgba(255,255,255,0.02); }
+        .badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+        .badge-logistic { background: #334155; color: #94a3b8; }
+        .badge-plan { background: #1e3a8a; color: #60a5fa; }
+        .badge-cost { background: #064e3b; color: #34d399; }
+        .status-badge { font-size: 0.6rem; padding: 1px 4px; border-radius: 3px; cursor: pointer; display: inline-block; }
         .status-pending { background: #475569; color: #f8fafc; }
         .status-done { background: #059669; color: #f8fafc; }
-        .img-preview { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 8px; opacity: 0.8; transition: opacity 0.3s; }
+        .img-preview { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-top: 8px; opacity: 0.8; transition: opacity 0.3s; background: #1e293b; }
         .img-preview:hover { opacity: 1; }
         .map-link { color: #60a5fa; text-decoration: underline; font-size: 0.7rem; }
-        .doc-card { background: #1e293b; border: 1px solid #334155; padding: 10px; rounded: 12px; }
-        .tab-btn { position: relative; }
-        .progress-bar { height: 4px; background: #334155; border-radius: 2px; margin-top: 4px; }
+        .doc-card { background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 12px; }
+        .progress-bar { height: 4px; background: #334155; border-radius: 2px; margin-top: 4px; overflow: hidden; }
         .progress-fill { height: 100%; background: #3b82f6; width: 0%; transition: width 0.5s; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="p-2 md:p-6" onload="initApp()">
@@ -25,7 +38,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div>
                     <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
-                        EUROPA v11.5: COCKPIT ONLINE
+                        EUROPA v12.0: COCKPIT ONLINE
                     </h1>
                     <p class="text-slate-400 text-sm">31 de Mayo — 02 de Julio | Control de Operaciones</p>
                     <div class="progress-bar"><div id="main-progress" class="progress-fill"></div></div>
@@ -49,22 +62,22 @@
                 <i class="fa-solid fa-folder-open text-blue-400"></i> Gestor de Documentos (Vault)
             </h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <a href="./docs/reservas/vuelos.pdf" class="doc-card flex items-center gap-3 hover:bg-slate-700 transition">
+                <div class="doc-card flex items-center gap-3 opacity-50 cursor-not-allowed">
                     <i class="fa-solid fa-plane text-emerald-400"></i>
-                    <div class="text-[10px]"><strong>VUELOS</strong><br><span class="opacity-50">PDF (5 MB)</span></div>
-                </a>
-                <a href="./docs/reservas/trenes.pdf" class="doc-card flex items-center gap-3 hover:bg-slate-700 transition">
+                    <div class="text-[10px]"><strong>VUELOS</strong><br><span class="opacity-50">Sin subir</span></div>
+                </div>
+                <div class="doc-card flex items-center gap-3 opacity-50 cursor-not-allowed">
                     <i class="fa-solid fa-train text-blue-400"></i>
-                    <div class="text-[10px]"><strong>TRENES</strong><br><span class="opacity-50">PDF (3 MB)</span></div>
-                </a>
-                <a href="./docs/reservas/hoteles.pdf" class="doc-card flex items-center gap-3 hover:bg-slate-700 transition">
+                    <div class="text-[10px]"><strong>TRENES</strong><br><span class="opacity-50">Sin subir</span></div>
+                </div>
+                <div class="doc-card flex items-center gap-3 opacity-50 cursor-not-allowed">
                     <i class="fa-solid fa-hotel text-purple-400"></i>
-                    <div class="text-[10px]"><strong>HOTELES</strong><br><span class="opacity-50">PDF (4 MB)</span></div>
-                </a>
-                <a href="./docs/reservas/seguro.pdf" class="doc-card flex items-center gap-3 hover:bg-slate-700 transition">
+                    <div class="text-[10px]"><strong>HOTELES</strong><br><span class="opacity-50">Sin subir</span></div>
+                </div>
+                <div class="doc-card flex items-center gap-3 opacity-50 cursor-not-allowed">
                     <i class="fa-solid fa-shield-halved text-rose-400"></i>
-                    <div class="text-[10px]"><strong>SEGURO</strong><br><span class="opacity-50">PDF (1 MB)</span></div>
-                </a>
+                    <div class="text-[10px]"><strong>SEGURO</strong><br><span class="opacity-50">Sin subir</span></div>
+                </div>
             </div>
         </section>
 
@@ -89,114 +102,36 @@
 
         <!-- Contenidos -->
         <main>
-            <!-- [ESPAÑA I] -->
             <div id="espana1" class="tab-content active space-y-4">
-                <div class="bg-blue-900/10 border-l-4 border-blue-500 p-4 mb-4 rounded-r-xl">
-                    <h2 class="text-xl font-bold text-blue-400">Madrid Clásico</h2>
-                    <p class="text-sm text-slate-400 italic">"Aclimatación y primeras cañas."</p>
-                </div>
                 <div id="container-espana1" class="grid gap-2"></div>
             </div>
-
-            <!-- [PORTUGAL] -->
             <div id="portugal" class="tab-content space-y-4">
-                <div class="bg-emerald-900/10 border-l-4 border-emerald-500 p-4 mb-4 rounded-r-xl">
-                    <h2 class="text-xl font-bold text-emerald-400">Ruta Atlántica: Oporto y Lisboa</h2>
-                    <p class="text-sm text-slate-400 italic">"Vinos, fados y azulejos."</p>
-                </div>
                 <div id="container-portugal" class="grid gap-2"></div>
             </div>
-
-            <!-- [EL HITO] -->
             <div id="hito" class="tab-content space-y-4">
-                <div class="bg-rose-900/10 border-l-4 border-rose-500 p-4 mb-4 rounded-r-xl">
-                    <h2 class="text-xl font-bold text-rose-400">Madrid: El Evento Central</h2>
-                    <p class="text-sm text-slate-400 italic">"Toda la logística gira en torno a este fin de semana."</p>
-                </div>
                 <div id="container-hito" class="grid gap-2"></div>
             </div>
-
-            <!-- [BASE ÁMSTERDAM] -->
             <div id="amsterdam" class="tab-content space-y-4">
-                <div class="bg-teal-900/10 border-l-4 border-teal-500 p-4 mb-4 rounded-r-xl">
-                    <h2 class="text-xl font-bold text-teal-400">Operación Alojamiento Gratis</h2>
-                    <p class="text-sm text-slate-400 italic">"9 noches sin costo de hotel. Base táctica para incursiones a París y Bruselas."</p>
-                </div>
                 <div id="container-amsterdam" class="grid gap-2"></div>
             </div>
-
-            <!-- [CENTROEUROPA] -->
             <div id="centroeuropa" class="tab-content space-y-4">
-                <div class="bg-purple-900/10 border-l-4 border-purple-500 p-4 mb-4 rounded-r-xl">
-                    <h2 class="text-xl font-bold text-purple-400">Berlín, Praga y Cierre</h2>
-                    <p class="text-sm text-slate-400 italic">"Intensidad histórica y despedida europea."</p>
-                </div>
                 <div id="container-centroeuropa" class="grid gap-2"></div>
             </div>
         </main>
 
         <footer class="mt-12 text-center text-slate-600 text-[10px] pb-8 border-t border-slate-800 pt-4">
-            ROCKET TRIP PLANNER v11.0 | OPTIMIZADO PARA CONSUMO MÍNIMO DE TOKENS Y MÁXIMA CLARIDAD
+            PAULI TRAVEL OPS v12.0 | AGENTE AUTÓNOMO DE VIAJES
         </footer>
     </div>
 
     <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].classList.remove("active");
-            }
-            tablinks = document.getElementsByClassName("tab-btn");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
-            document.getElementById(tabName).classList.add("active");
-            evt.currentTarget.classList.add("active");
-        }
-
         const tripData = [
-            // ESPAÑA I (Madrid Táctico)
-            { tab: 'espana1', date: '31/05', title: 'Operación Desembarco: Madrid Centro', log: 'Aeropuerto -> Estación Sol. Compra Tarjeta Multi en máquinas Metro.', plan: 'Check-in zona Sol/Huertas. Atardecer en Templo de Debod.', cost: '39.70€', map: 'https://www.google.com/maps/search/Templo+de+Debod', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'espana1', date: '01/06', title: 'El Eje del Arte y Churros', log: 'A pie. Chocolatería San Ginés -> Museo del Prado.', plan: 'Churros en San Ginés. Tarde: Museo del Prado (Gratis 18:00-20:00).', cost: '21€', map: 'https://www.google.com/maps/search/Chocolatería+San+Ginés+Madrid', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'espana1', date: '02/06', title: 'Picnic Real en El Retiro', log: 'Suministros en Mercadona (Calle de Atocha).', plan: 'Mañana: Palacio Real. Tarde: Picnic en El Retiro.', cost: '28€', map: 'https://www.google.com/maps/search/Parque+del+Retiro', img: 'https://images.unsplash.com/photo-1574610141151-5079a0b1bc67?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'espana1', date: '03/06', title: 'Malasaña Vintage & Shopping', log: 'Metro Tribunal.', plan: 'Shopping: Magpie Vintage. Almuerzo: Takos al Pastor.', cost: '32€+', map: 'https://www.google.com/maps/search/Magpie+Vintage+Madrid', img: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'espana1', date: '04/06', title: 'Preparación Portugal & Last Call', log: 'Lavandería Speed Queen (Calle del Olmo).', plan: 'Logística. Maleta ligera 10kg. Cena: Pez Tortilla.', cost: '23€', map: 'https://www.google.com/maps/search/Pez+Tortilla+Madrid', img: 'https://images.unsplash.com/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=400&q=80' },
-
-            // PORTUGAL
-            { tab: 'portugal', date: '05/06', title: 'Madrid -> Oporto: El Puente', log: 'Vuelo Madrid-Oporto (Ryanair). Metro Línea E.', plan: 'Caminar por Ribeira. Atardecer en Jardim do Morro.', cost: '62.50€', map: 'https://www.google.com/maps/search/Jardim+do+Morro+Porto', img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '06/06', title: 'Francesinhas y Azulejos', log: 'A pie. Igreja do Carmo -> Café Santiago.', plan: 'Ver azulejos São Bento. Almuerzo: Café Santiago.', cost: '27€', map: 'https://www.google.com/maps/search/Café+Santiago+Porto', img: 'https://images.unsplash.com/photo-1552554705-649069695627?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '07/06', title: 'Oporto -> Lisboa (Alfa Pendular)', log: 'Tren Porto-Campanhã -> Lisboa Santa Apolónia.', plan: 'Check-in Lisboa. Paseo Praça do Comércio.', cost: '40€', map: 'https://www.google.com/maps/search/Praça+do+Comércio+Lisboa', img: 'https://images.unsplash.com/photo-1589197331516-4d8458bb841e?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '08/06', title: 'Operación Belém', log: 'Tranvía 15E desde Cais do Sodré.', plan: 'Pastéis de Belém. Torre de Belém.', cost: '35€', map: 'https://www.google.com/maps/search/Pastéis+de+Belém', img: 'https://images.unsplash.com/photo-1590001155093-a3c66ab0c3ff?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '09/06', title: 'Sintra: El Palacio de Cuento', log: 'Tren Estación Rossio (40 min).', plan: 'Quinta da Regaleira -> Palacio da Pena.', cost: '40€', map: 'https://www.google.com/maps/search/Palacio+da+Pena+Sintra', img: 'https://images.unsplash.com/photo-1594916845353-8472491a6d96?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '10/06', title: 'Miradores de Lisboa & Fado', log: 'Tranvía 28. Miradouro Senhora do Monte.', plan: 'Tour miradores. Noche de Fado en Tasca do Chico.', cost: '25€', map: 'https://www.google.com/maps/search/Miradouro+da+Senhora+do+Monte', img: 'https://images.unsplash.com/photo-1549413240-428669e46a9e?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'portugal', date: '11/06', title: 'Lisboa -> Madrid: El Retorno', log: 'Vuelo Retorno o FlixBus Nocturno.', plan: 'Conservas en "Loja das Conservas". Bifana en Plaza Figueira.', cost: '70€', map: 'https://www.google.com/maps/search/Loja+das+Conservas+Lisboa', img: 'https://images.unsplash.com/photo-1512813583134-2e99f0f9754c?auto=format&fit=crop&w=400&q=80' },
-
-            // EL HITO
-            { tab: 'hito', date: '12/06', title: 'Madrid: Reset', log: 'Supermercado Día para stock.', plan: 'Descanso post-Portugal. Noche tranquila Plaza Santa Ana.', cost: '20€', map: 'https://www.google.com/maps/search/Plaza+de+Santa+Ana+Madrid', img: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'hito', date: '13/06', title: 'La Previa del Hito', log: 'Cervecería La Blanca Paloma.', plan: 'Reunión equipo. Cena carbohidratos.', cost: '33€', map: 'https://www.google.com/maps/search/La+Blanca+Paloma+Madrid', img: 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'hito', date: '14/06', title: 'DÍA X: EL CONCIERTO', log: 'Metro/Bus al recinto.', plan: 'Evento Principal: Bad Bunny. Disfruta, Seba.', cost: '65€', map: 'https://www.google.com/maps/search/Estadio+Madrid+Bad+Bunny', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80' },
-
-            // ÁMSTERDAM
-            { tab: 'amsterdam', date: '15/06', title: 'Madrid -> Ámsterdam', log: 'Vuelo Barajas -> Schiphol. Tren NS.', plan: 'Instalación casa amiga. Red Light District.', cost: '107.90€', map: 'https://www.google.com/maps/search/Amsterdam+Centraal', img: 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '16/06', title: 'Ciclismo & Canales', log: 'Alquiler Bici Black Bikes.', plan: 'Bici Jordaan. Winkel 43 (Apple Pie).', cost: '23€', map: 'https://www.google.com/maps/search/Winkel+43+Amsterdam', img: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '17/06', title: 'Museumplein', log: 'Rijksmuseum -> Van Gogh.', plan: 'Van Gogh Museum. Rijksmuseum.', cost: '50€', map: 'https://www.google.com/maps/search/Van+Gogh+Museum', img: 'https://images.unsplash.com/photo-1601961405399-801fb1f34581?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '18/06', title: 'Incursión Bruselas', log: 'Tren FlixTrain o IC (2h 45m).', plan: 'Grand Place -> Gofres -> Patatas Fritas.', cost: '47€', map: 'https://www.google.com/maps/search/Grand+Place+Brussels', img: 'https://images.unsplash.com/photo-1573155993874-d5d48af862ba?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '19/06', title: 'Día Descanso / Stroopwafels', log: 'Albert Heijn (Supermercado).', plan: 'Picnic canales. Compras Stroopwafels.', cost: '15€', map: 'https://www.google.com/maps/search/Albert+Heijn+Amsterdam', img: 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '20/06', title: 'PARÍS 1: La Torre', log: 'Eurostar 07:45 -> Gare du Nord.', plan: 'CheZaline (Sandwich). Trocadéro -> Eiffel.', cost: '100€', map: 'https://www.google.com/maps/search/Torre+Eiffel', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '21/06', title: 'PARÍS 2: Montmartre', log: 'Metro Línea 2 -> Anvers.', plan: 'Sacré-Cœur. Place du Tertre. Tren vuelta.', cost: '95€', map: 'https://www.google.com/maps/search/Sacre+Coeur+Paris', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '22/06', title: 'Zaanse Schans', log: 'Tren local Centraal (15 min).', plan: 'Molinos, zuecos y queserías.', cost: '12€', map: 'https://www.google.com/maps/search/Zaanse+Schans', img: 'https://images.unsplash.com/photo-1527668752968-14dc70a27c95?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'amsterdam', date: '23/06', title: 'Última Noche Ámsterdam', log: 'Cena agradecimiento amiga.', plan: 'Barco canales (Anochecer). Maletas.', cost: '45€', map: 'https://www.google.com/maps/search/Amsterdam+Canal+Cruise', img: 'https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=400&q=80' },
-
-            // CENTROEUROPA
-            { tab: 'centroeuropa', date: '24/06', title: 'AMS -> Berlín', log: 'Tren IC Directo (6h 20m).', plan: 'Check-in Berlín. Alexanderplatz. Currywurst.', cost: '65€', map: 'https://www.google.com/maps/search/Alexanderplatz+Berlin', img: 'https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '25/06', title: 'Berlín: Cicatrices', log: 'Puerta Brandeburgo -> Memorial.', plan: 'Reichstag (Cúpula). Topografía Terror.', cost: '21€', map: 'https://www.google.com/maps/search/Brandenburg+Gate+Berlin', img: 'https://images.unsplash.com/photo-1599946347341-6cd5d4f13abb?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '26/06', title: 'Berlín Alternativo', log: 'East Side Gallery. Metro U1.', plan: 'Caminar Muro. RAW-Gelände.', cost: '20€', map: 'https://www.google.com/maps/search/East+Side+Gallery+Berlin', img: 'https://images.unsplash.com/photo-1560930950-5cc20e80e392?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '27/06', title: 'Berlín -> Praga', log: 'Tren EuroCity (4h 30m).', plan: 'Llegada Praga. Plaza Ciudad Vieja. Goulash.', cost: '38€', map: 'https://www.google.com/maps/search/Old+Town+Square+Prague', img: 'https://images.unsplash.com/photo-1517322048670-4fba75cbe627?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '28/06', title: 'Praga: El Castillo', log: 'Puente Carlos (08:00 AM).', plan: 'Castillo Praga. Callejón Oro.', cost: '21€', map: 'https://www.google.com/maps/search/Prague+Castle', img: 'https://images.unsplash.com/photo-1541343672885-9be56236302a?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '29/06', title: 'Praga: Barrio Judío', log: 'Josefov -> Monte Petrín.', plan: 'Sinagogas. Funicular Petrín. Jazz Club.', cost: '23€', map: 'https://www.google.com/maps/search/Josefov+Prague', img: 'https://images.unsplash.com/photo-1527419249058-299f19ad24f2?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '30/06', title: 'Praga: Despedida', log: 'Día libre "perderse".', plan: 'Muro Lennon. Trdelník. Cena masiva.', cost: '40€', map: 'https://www.google.com/maps/search/Lennon+Wall+Prague', img: 'https://images.unsplash.com/photo-1517322048670-4fba75cbe627?auto=format&fit=crop&w=400&q=80' },
-            { tab: 'centroeuropa', date: '01/07', title: 'Praga -> Madrid', log: 'Vuelo Praga-Madrid. Bus 119.', plan: 'Retorno a Madrid. Cierre Operación.', cost: '125€', map: 'https://www.google.com/maps/search/Aeropuerto+Praga', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=400&q=80' }
+            { tab: 'espana1', date: '31/05', title: 'Operación Desembarco: Madrid', log: 'Aeropuerto (L8) -> Sol. Compra Multi (2.5€) + 10v (12.2€).', plan: 'Check-in Sol. Atardecer Templo Debod.', cost: '39.70€', map: 'https://www.google.com/maps/search/Templo+de+Debod', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=400&q=80' },
+            { tab: 'espana1', date: '01/06', title: 'Eje del Arte & Churros', log: 'A pie. San Ginés -> Prado.', plan: 'Churros San Ginés. Prado (Gratis 18:00).', cost: '21€', map: 'https://www.google.com/maps/search/Chocolateria+San+Gines', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=400&q=80' },
+            { tab: 'portugal', date: '05/06', title: 'Madrid -> Oporto', log: 'Vuelo Ryanair. Metro L-E -> Bolhão.', plan: 'Ribeira. Atardecer Jardim do Morro.', cost: '62.50€', map: 'https://www.google.com/maps/search/Jardim+do+Morro+Porto', img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=400&q=80' },
+            { tab: 'hito', date: '14/06', title: 'EL CONCIERTO: BAD BUNNY', log: 'Metro al recinto. Calzado cómodo.', plan: 'Evento Principal. Disfruta Seba.', cost: '65€', map: 'https://www.google.com/maps/search/Madrid+Concert+Venue', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80' },
+            { tab: 'amsterdam', date: '20/06', title: 'PARÍS I: Incursión Táctica', log: 'Eurostar 07:45. Metro Navigo Easy.', plan: 'Eiffel -> Marais. Cena Falafel.', cost: '100€', map: 'https://www.google.com/maps/search/Torre+Eiffel', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=400&q=80' },
+            { tab: 'centroeuropa', date: '28/06', title: 'Praga: El Castillo', log: 'Puente Carlos (08:00 AM).', plan: 'Castillo Praga. Callejón Oro.', cost: '21€', map: 'https://www.google.com/maps/search/Castillo+Praga', img: 'https://images.unsplash.com/photo-1541343672885-9be56236302a?auto=format&fit=crop&w=400&q=80' }
         ];
 
         function initApp() {
@@ -204,69 +139,59 @@
             updateProgress();
         }
 
+        function openTab(evt, tabName) {
+            const contents = document.getElementsByClassName("tab-content");
+            for (let c of contents) c.classList.remove("active");
+            const btns = document.getElementsByClassName("tab-btn");
+            for (let b of btns) b.classList.remove("active");
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
         function toggleStatus(date) {
-            const status = localStorage.getItem('status-' + date);
-            const nextStatus = status === 'done' ? 'pending' : 'done';
-            localStorage.setItem('status-' + date, nextStatus);
+            const status = localStorage.getItem('status-' + date) === 'done' ? 'pending' : 'done';
+            localStorage.setItem('status-' + date, status);
             renderTrip();
             updateProgress();
         }
 
         function updateProgress() {
             const total = tripData.length;
-            let doneCount = 0;
-            tripData.forEach(day => {
-                if(localStorage.getItem('status-' + day.date) === 'done') doneCount++;
-            });
-            const percent = (doneCount / total) * 100;
-            document.getElementById('main-progress').style.width = percent + '%';
+            const done = tripData.filter(d => localStorage.getItem('status-' + d.date) === 'done').length;
+            document.getElementById('main-progress').style.width = ((done/total)*100) + '%';
         }
 
         function renderTrip() {
-            // Limpiar contenedores
-            const containers = ['espana1', 'portugal', 'hito', 'amsterdam', 'centroeuropa'];
-            containers.forEach(c => document.getElementById('container-' + c).innerHTML = '');
+            const groups = ['espana1', 'portugal', 'hito', 'amsterdam', 'centroeuropa'];
+            groups.forEach(g => document.getElementById('container-' + g).innerHTML = '');
 
             tripData.forEach(day => {
                 const container = document.getElementById('container-' + day.tab);
                 if (container) {
                     const status = localStorage.getItem('status-' + day.date) || 'pending';
-                    const statusClass = status === 'done' ? 'status-done' : 'status-pending';
-                    const row = document.createElement('div');
-                    row.className = 'day-row bg-slate-800/20 p-4 rounded-lg grid grid-cols-1 md:grid-cols-12 gap-4 items-start';
-                    row.innerHTML = `
-                        <div class="md:col-span-2 text-center border-r border-slate-700 pr-4">
-                            <span class="text-xs font-bold text-slate-500">${day.date}</span>
-                            <div class="status-badge ${statusClass} mt-2" onclick="toggleStatus('${day.date}')">${status.toUpperCase()}</div>
-                            <img src="${day.img}" class="img-preview" alt="Vista">
-                        </div>
-                        <div class="md:col-span-10">
-                            <div class="flex justify-between items-start mb-2">
-                                <h4 class="text-md font-bold text-blue-300">${day.title}</h4>
-                                <a href="${day.map}" target="_blank" class="map-link"><i class="fa-solid fa-location-dot"></i> MAPA GOOGLE</a>
+                    const sClass = status === 'done' ? 'status-done' : 'status-pending';
+                    container.innerHTML += `
+                        <div class="day-row bg-slate-800/20 p-4 rounded-lg grid grid-cols-1 md:grid-cols-12 gap-4">
+                            <div class="md:col-span-2 text-center border-r border-slate-700 pr-4">
+                                <span class="text-xs font-bold text-slate-500">${day.date}</span>
+                                <div class="status-badge ${sClass} block mt-2" onclick="toggleStatus('${day.date}')">${status.toUpperCase()}</div>
+                                <img src="${day.img}" class="img-preview" alt="View">
                             </div>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="bg-slate-900/40 p-2 rounded">
-                                    <span class="badge badge-logistic">Logística</span>
-                                    <p class="text-[11px] text-slate-300 mt-1">${day.log}</p>
+                            <div class="md:col-span-10">
+                                <div class="flex justify-between items-center mb-2">
+                                    <h4 class="text-md font-bold text-blue-300">${day.title}</h4>
+                                    <a href="${day.map}" target="_blank" class="map-link"><i class="fa-solid fa-location-dot"></i> GOOGLE MAPS</a>
                                 </div>
-                                <div class="bg-slate-900/40 p-2 rounded">
-                                    <span class="badge badge-plan">Plan del Día</span>
-                                    <p class="text-[11px] text-slate-300 mt-1">${day.plan}</p>
-                                </div>
-                                <div class="bg-slate-900/40 p-2 rounded">
-                                    <span class="badge badge-cost">Presupuesto</span>
-                                    <p class="text-xs text-emerald-400 font-mono mt-1">${day.cost}</p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-[11px]">
+                                    <div class="bg-slate-900/40 p-2 rounded"><span class="badge badge-logistic">Logística</span><p class="mt-1">${day.log}</p></div>
+                                    <div class="bg-slate-900/40 p-2 rounded"><span class="badge badge-plan">Plan</span><p class="mt-1">${day.plan}</p></div>
+                                    <div class="bg-slate-900/40 p-2 rounded"><span class="badge badge-cost">Coste</span><p class="mt-1 text-emerald-400">${day.cost}</p></div>
                                 </div>
                             </div>
-                        </div>
-                    `;
-                    container.appendChild(row);
+                        </div>`;
                 }
             });
         }
-
-        document.addEventListener('DOMContentLoaded', renderTrip);
     </script>
 </body>
 </html>
