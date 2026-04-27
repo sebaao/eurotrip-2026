@@ -76,6 +76,12 @@
                     <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">Budget</p>
                     <p class="text-3xl font-bold text-emerald-400">€2,850</p>
                 </div>
+                
+                <div class="glass px-8 py-5 rounded-3xl text-center border-amber-500/20">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">EUR &rarr; CLP</p>
+                    <p class="text-2xl font-bold text-amber-400">~$1,050</p>
+                </div>
+
                 <div class="glass px-8 py-5 rounded-3xl text-center border-blue-500/20">
                     <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">Misión</p>
                     <p id="main-progress" class="text-3xl font-bold text-blue-400">0%</p>
@@ -155,40 +161,405 @@
 
     <script>
         const tripData = [
-            { phase: 'phase1', date: '31/05', title: 'Operación Barajas', city: 'Madrid', log: 'Metro L8 -> Centro Sol. Tarjeta Multi: €12.', journey: 'Morning: Land at Barajas & check-in. Afternoon: Explore Puerta del Sol. Evening: Welcome dinner at El Brillante (Calamari sandwich).', tip: 'Get the Multi Card at the airport for all metro trips.', map: 'https://maps.app.goo.gl/9Z1J3', cost: '€75', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase1', date: '01/06', title: 'Eje del Arte', city: 'Madrid', log: 'A pie. Museos Prado/Reina Sofía.', journey: 'Morning: Prado Museum (book in advance). Afternoon: Reina Sofía & Atocha area. Evening: Tapas tour at Mercado San Miguel.', tip: 'Prado is free from 18:00 to 20:00, but the queue is huge.', map: 'https://maps.app.goo.gl/madrid1', cost: '€60', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase1', date: '02/06', title: 'Reencuentro Tavi', city: 'Madrid', log: 'Paseo por Retiro.', journey: 'Morning: Pick up Tavi. Afternoon: Relax at El Retiro Park. Evening: Sunset drinks and dinner in Malasaña (Pez Tortilla).', tip: 'Try the tortilla de patatas at Pez Tortilla, it is legendary.', map: 'https://maps.app.goo.gl/retiro', cost: '€85', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '03/06', title: 'Ruta al Oeste', city: 'Alentejo', log: 'Bus/Tren Madrid-Lisboa-Évora.', journey: 'Morning: High-speed train to Portugal. Afternoon: Explore the Roman Temple of Évora. Evening: Wine tasting and local cheese dinner.', tip: 'Évora is very hot; stay hydrated and seek shade.', map: 'https://maps.app.goo.gl/evora', cost: '€80', img: 'https://images.unsplash.com/photo-1580237541049-2d715a09486e?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '04/06', title: 'Costa Vicentina I', city: 'Aljezur', log: 'Alquiler coche/Furgoneta.', journey: 'Morning: Pick up rental car. Afternoon: Drive to Aljezur and explore Arrifana beach. Evening: Fresh grilled fish at a local tavern.', tip: 'A rental car is essential for this part of the trip.', map: 'https://maps.app.goo.gl/aljezur', cost: '€90', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '05/06', title: 'Acantilados y Surf', city: 'Sagres', log: 'Roadtrip por la costa.', journey: 'Morning: Visit the Sagres Fortress. Afternoon: Surf lesson at Beliche beach. Evening: Sunset at Cape Saint Vincent (the end of the world).', tip: 'The wind at the Cape can be very strong and cold.', map: 'https://maps.app.goo.gl/sagres', cost: '€85', img: 'https://images.unsplash.com/photo-1518652391039-38914092b36e?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '06/06', title: 'Lisboa: Barrio Alto', city: 'Lisboa', log: 'Tram 28. Caminar mucho.', journey: 'Morning: Iconic Tram 28 ride. Afternoon: Walk through Alfama districts. Evening: Fado music and drinks in Bairro Alto.', tip: 'Watch out for pickpockets on the popular tram routes.', map: 'https://maps.app.goo.gl/lisbon', cost: '€95', img: 'https://images.unsplash.com/photo-1562184552-997c461abbe6?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '07/06', title: 'Sintra: Cuento de Hadas', city: 'Sintra', log: 'Tren desde Rossio (40min).', journey: 'Morning: Pena Palace (early arrival). Afternoon: Quinta da Regaleira & initiation well. Evening: Pastéis de Belém on the way back.', tip: 'Buy palace tickets online to skip the massive queues.', map: 'https://maps.app.goo.gl/sintra', cost: '€100', img: 'https://images.unsplash.com/photo-1523456761036-70e93240e34c?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '08/06', title: 'Oporto: Ribeira', city: 'Porto', log: 'Tren Alfa Pendular.', journey: 'Morning: Train to Porto. Afternoon: Walk the Ribeira and cross Dom Luís I Bridge. Evening: Francesinha dinner at Lado B.', tip: 'Wear shoes with good grip; the stone streets are slippery.', map: 'https://maps.app.goo.gl/porto', cost: '€90', img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase2', date: '09/06', title: 'Bodegas y Puentes', city: 'Porto', log: 'Caminar por Vila Nova de Gaia.', journey: 'Morning: Visit Livraria Lello. Afternoon: Port wine cellar tour in Gaia. Evening: River cruise at sunset.', tip: 'Book the library visit weeks in advance.', map: 'https://maps.app.goo.gl/gaia', cost: '€85', img: 'https://images.unsplash.com/photo-1522036417753-311ba0da2635?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase3', date: '10/06', title: 'Retorno Táctico', city: 'Madrid', log: 'Vuelo Low Cost OPO-MAD.', journey: 'Morning: Last breakfast in Porto. Afternoon: Flight back to Madrid & check-in. Evening: Casual dinner in La Latina.', tip: 'Check baggage limits for low-cost flights like Ryanair/Vueling.', map: 'https://maps.app.goo.gl/madrid3', cost: '€70', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase3', date: '11/06', title: 'Preparativos Hito', city: 'Madrid', log: 'Descanso / Lavandería.', journey: 'Morning: Laundry and logistics. Afternoon: Shopping on Gran Vía. Evening: Movie night or chill at the hotel.', tip: 'Use "Lavandería Autoservicio" to save on hotel costs.', map: 'https://maps.app.goo.gl/madrid4', cost: '€50', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase3', date: '12/06', title: 'Día de Estadio I', city: 'Madrid', log: 'Metro Línea 7.', journey: 'Morning: Relaxed breakfast. Afternoon: Visit the Metropolitano Stadium area. Evening: Dinner with other fans.', tip: 'The area around the stadium gets very crowded early.', map: 'https://maps.app.goo.gl/stadium', cost: '€60', img: 'https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase3', date: '13/06', title: 'Calma antes de la Tormenta', city: 'Madrid', log: 'Pícnic en el Templo de Debod.', journey: 'Morning: Buy supplies for picnic. Afternoon: Chill at Temple of Debod. Evening: Early night to be ready for the big day.', tip: 'Debod is the best spot for sunset in Madrid.', map: 'https://maps.app.goo.gl/debod', cost: '€55', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase3', date: '14/06', title: 'EL HITO: BAD BUNNY', city: 'Madrid', log: 'Incursión Estadio Metropolitano.', journey: 'Morning: Final prep & hydration. Afternoon: Head to the stadium. Evening: The main event - Bad Bunny live!', tip: 'Keep your digital tickets offline in case of no signal.', map: 'https://maps.app.goo.gl/metropolitano', cost: '€120', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '15/06', title: 'Resaca & París', city: 'París', log: 'Vuelo MAD-ORY (Orly).', journey: 'Morning: Sleep in. Afternoon: Flight to Paris. Evening: Walk by the Seine and first French crepe.', tip: 'Orly is closer to the city than CDG; use the Orlyval.', map: 'https://maps.app.goo.gl/paris1', cost: '€110', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '16/06', title: 'Montmartre y Bohemios', city: 'París', log: 'Metro Navigo Easy.', journey: 'Morning: Sacré-Cœur basilica. Afternoon: Explore Montmartre art stalls. Evening: Dinner at a cozy bistro.', tip: 'Sacré-Cœur has the best free view of Paris.', map: 'https://maps.app.goo.gl/montmartre', cost: '€100', img: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '17/06', title: 'Canal Saint-Martin', city: 'París', log: 'Paseo en bici (Velib).', journey: 'Morning: Picnic supplies from a boulangerie. Afternoon: Cycling along Canal Saint-Martin. Evening: Drinks with locals by the water.', tip: 'Rent a Velib bike for an authentic Parisian experience.', map: 'https://maps.app.goo.gl/canal', cost: '€90', img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '18/06', title: 'Louvre & Tullerías', city: 'París', log: 'Caminar por el Sena.', journey: 'Morning: Louvre Museum (the fast route). Afternoon: Relax in Tuileries Garden. Evening: Eiffel Tower sparkling lights.', tip: 'The Eiffel Tower sparkles every hour on the hour at night.', map: 'https://maps.app.goo.gl/louvre', cost: '€105', img: 'https://images.unsplash.com/photo-1541343672885-9be56236302a?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '19/06', title: 'Incursión Alemana', city: 'Freiburg', log: 'TGV Paris-Strasbourg + Tren.', journey: 'Morning: TGV train to Strasbourg. Afternoon: Cross into Germany to Freiburg. Evening: Dinner at a traditional brauhaus.', tip: 'Strasbourg is a great 2-hour stopover for lunch.', map: 'https://maps.app.goo.gl/freiburg', cost: '€85', img: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '20/06', title: 'Senderos Densos', city: 'Titisee', log: 'Tren Regional (Gratis con hotel).', journey: 'Morning: Train to Titisee Lake. Afternoon: Hike around the lake. Evening: Black Forest cake for dessert.', tip: 'The KONUS card (free with accommodation) covers all local trains.', map: 'https://maps.app.goo.gl/titisee', cost: '€70', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '21/06', title: 'Triberg: Cascadas', city: 'Triberg', log: 'Exploración bosque profundo.', journey: 'Morning: Visit Germany\'s highest waterfalls. Afternoon: See the world\'s largest Cuckoo Clock. Evening: Quiet night in the woods.', tip: 'Buy nuts to feed the squirrels at the waterfalls.', map: 'https://maps.app.goo.gl/triberg', cost: '€75', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '22/06', title: 'Berlín: Historia Viva', city: 'Berlín', log: 'ICE Tren Alta Velocidad.', journey: 'Morning: High-speed ICE train to Berlin. Afternoon: Visit Brandenburg Gate. Evening: Currywurst dinner at Curry 36.', tip: 'Berlin is huge; use the U-Bahn/S-Bahn constantly.', map: 'https://maps.app.goo.gl/berlin', cost: '€85', img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '23/06', title: 'Raves & Muros', city: 'Berlín', log: 'U-Bahn 24h.', journey: 'Morning: East Side Gallery (Berlin Wall). Afternoon: Checkpoint Charlie and Museum Island. Evening: Explore the nightlife in Kreuzberg.', tip: 'The East Side Gallery is better visited early to avoid crowds.', map: 'https://maps.app.goo.gl/eastside', cost: '€80', img: 'https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase4', date: '24/06', title: 'Tempelhof: Picnic', city: 'Berlín', log: 'Alquiler de patines/bici.', journey: 'Morning: Sunday market at Mauerpark. Afternoon: Picnic at the former Tempelhof Airport. Evening: Last Berlin beer.', tip: 'Tempelhof is perfect for sunset and people-watching.', map: 'https://maps.app.goo.gl/tempelhof', cost: '€70', img: 'https://images.unsplash.com/photo-1599946347371-68eb71b16afc?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '25/06', title: 'Canales y Puentes', city: 'Ámsterdam', log: 'Tren Berlin-Amsterdam.', journey: 'Morning: Scenic train ride. Afternoon: Check-in and canal walk. Evening: Dinner at Foodhallen.', tip: 'Rent a bike only if you are confident; traffic is intense.', map: 'https://maps.app.goo.gl/ams', cost: '€110', img: 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '26/06', title: 'Bici en los Polders', city: 'Zaanse Schans', log: 'Bici hacia el norte.', journey: 'Morning: Train to Zaanse Schans. Afternoon: Windmills and cheese tasting. Evening: Back to Amsterdam for night canals.', tip: 'Zaanse Schans is free to enter, but windmills cost extra.', map: 'https://maps.app.goo.gl/windmills', cost: '€95', img: 'https://images.unsplash.com/photo-1534384323796-75950ad5ee54?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '27/06', title: 'Vondelpark & Relax', city: 'Ámsterdam', log: 'Tranvía.', journey: 'Morning: Anne Frank House (if booked). Afternoon: Vondelpark picnic. Evening: Farewell dinner in Jordaan.', tip: 'Book Anne Frank House exactly 6 weeks in advance at 10 AM.', map: 'https://maps.app.goo.gl/vondel', cost: '€100', img: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '28/06', title: 'Regreso al Origen', city: 'Madrid', log: 'Vuelo AMS-MAD.', journey: 'Morning: Final stroopwafel. Afternoon: Flight to Madrid. Evening: Tapas in La Latina.', tip: 'Arrive at Schiphol 3 hours early; security can be slow.', map: 'https://maps.app.goo.gl/latina', cost: '€90', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '29/06', title: 'Compras Rastro', city: 'Madrid', log: 'Caminar por Embajadores.', journey: 'Morning: Explore El Rastro flea market. Afternoon: Shopping in Chueca. Evening: Vermouth and tapas.', tip: 'The best treasures at El Rastro are in the side streets.', map: 'https://maps.app.goo.gl/rastro', cost: '€60', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '30/06', title: 'Despedida Seba', city: 'Madrid', log: 'Chill en Casa de Campo.', journey: 'Morning: Cable car to Casa de Campo. Afternoon: Relax by the lake. Evening: Final big Spanish dinner.', tip: 'The Teleférico offers great views of the Royal Palace.', map: 'https://maps.app.goo.gl/casacampo', cost: '€65', img: 'https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '01/07', title: 'Logística Final', city: 'Madrid', log: 'Check-in JFK.', journey: 'Morning: Souvenir shopping. Afternoon: Pack and check documents. Evening: Last churros at San Ginés.', tip: 'San Ginés is open 24 hours; go late to avoid the line.', map: 'https://maps.app.goo.gl/madridfinal', cost: '€50', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
-            { phase: 'phase5', date: '02/07', title: 'Salida MAD-JFK', city: 'Aeropuerto', log: 'Taxi/Uber a T4.', journey: 'Morning: Head to Barajas Terminal 4. Afternoon: Flight to JFK. Evening: Arrival in NYC.', tip: 'T4 is beautiful but huge; allow extra time to reach your gate.', map: 'https://maps.app.goo.gl/t4', cost: '€40', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109c0f2?auto=format&fit=crop&w=1200&q=80' }
-        ];
+  {
+    "phase": "phase1",
+    "date": "31/05",
+    "title": "Landing Madrid",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase1",
+    "date": "01/06",
+    "title": "Centro Hist\u00f3rico",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase1",
+    "date": "02/06",
+    "title": "Arte y Retiro",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase1",
+    "date": "03/06",
+    "title": "Malasa\u00f1a Vibe",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase1",
+    "date": "04/06",
+    "title": "\u00daltimo d\u00eda Madrid",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "05/06",
+    "title": "Llegada Oporto",
+    "city": "Porto",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Porto. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Porto",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "06/06",
+    "title": "Ribeira y Vinos",
+    "city": "Porto",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Porto. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Porto",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "07/06",
+    "title": "Viaje a Lisboa",
+    "city": "Lisboa",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Lisboa. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Lisboa",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "08/06",
+    "title": "Bel\u00e9m y Pasteles",
+    "city": "Lisboa",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Lisboa. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Lisboa",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "09/06",
+    "title": "Sintra M\u00edstica",
+    "city": "Sintra",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Sintra. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Sintra",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "10/06",
+    "title": "Alfama y Fado",
+    "city": "Lisboa",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Lisboa. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Lisboa",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase2",
+    "date": "11/06",
+    "title": "Retorno a Madrid",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase3",
+    "date": "12/06",
+    "title": "Descanso y Log\u00edstica",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase3",
+    "date": "13/06",
+    "title": "Previa del Concierto",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase3",
+    "date": "14/06",
+    "title": "EL HITO: BAD BUNNY",
+    "city": "Madrid",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Madrid. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Madrid",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "15/06",
+    "title": "Vuelo a Par\u00eds",
+    "city": "Paris",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Paris. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Paris",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "16/06",
+    "title": "Torre Eiffel & Sena",
+    "city": "Paris",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Paris. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Paris",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "17/06",
+    "title": "Louvre y Marais",
+    "city": "Paris",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Paris. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Paris",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "18/06",
+    "title": "Montmartre Bohemio",
+    "city": "Paris",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Paris. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Paris",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "19/06",
+    "title": "Viaje a Berl\u00edn",
+    "city": "Berlin",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Berlin. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Berlin",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "20/06",
+    "title": "Muro y Puerta",
+    "city": "Berlin",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Berlin. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Berlin",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "21/06",
+    "title": "Cultura Alternativa",
+    "city": "Berlin",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Berlin. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Berlin",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase4",
+    "date": "22/06",
+    "title": "Viaje a \u00c1msterdam",
+    "city": "Amsterdam",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Amsterdam. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Amsterdam",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "23/06",
+    "title": "Llegada y Canales",
+    "city": "Amsterdam",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Amsterdam. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Amsterdam",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "24/06",
+    "title": "Bicis y Museos",
+    "city": "Amsterdam",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Amsterdam. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Amsterdam",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "25/06",
+    "title": "Vondelpark",
+    "city": "Amsterdam",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Amsterdam. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Amsterdam",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "26/06",
+    "title": "Zaanse Schans",
+    "city": "Amsterdam",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Amsterdam. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Amsterdam",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "27/06",
+    "title": "Vuelo a Praga",
+    "city": "Prague",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Prague. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Prague",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "28/06",
+    "title": "Reloj Astron\u00f3mico",
+    "city": "Prague",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Prague. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Prague",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "29/06",
+    "title": "Castillo y Puente",
+    "city": "Prague",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Prague. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Prague",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "30/06",
+    "title": "Cerveza y Cultura",
+    "city": "Prague",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Prague. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Prague",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "01/07",
+    "title": "\u00daltimas Compras",
+    "city": "Prague",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Prague. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Prague",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    "phase": "phase5",
+    "date": "02/07",
+    "title": "Regreso a Casa",
+    "city": "Aeropuerto",
+    "log": "Usa el metro o camina.",
+    "journey": "10:00 Exploraci\u00f3n en Aeropuerto. 14:00 Almuerzo t\u00e1ctico. 20:00 Relajo y cena.",
+    "tip": "Lleva siempre una botella de agua.",
+    "map": "https://www.google.com/maps/search/Aeropuerto",
+    "cost": "\u20ac60",
+    "img": "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=800&q=80"
+  }
+]
+;
+
 
         const checklist = {
             "Combat Essentials": ["Passport (+ Cloud Copy)", "AirTags (inside bags)", "eSim App (Airalo)", "Universal Adapter", "Powerbank 20k mAh"],
