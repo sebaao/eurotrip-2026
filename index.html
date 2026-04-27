@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador Maestro de Viajes v11.0 - UX & Logistics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .tab-btn.active { border-bottom: 3px solid #3b82f6; color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        .day-row { border-bottom: 1px solid #1e293b; transition: background 0.2s; }
+        .day-row:hover { background: rgba(255,255,255,0.02); }
+        .badge { font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+        .badge-logistic { background: #334155; color: #94a3b8; }
+        .badge-plan { background: #1e3a8a; color: #60a5fa; }
+        .badge-cost { background: #064e3b; color: #34d399; }
+    </style>
+</head>
+<body class="p-2 md:p-6">
+    <div class="max-w-5xl mx-auto">
+        <!-- Dashboard Superior -->
+        <header class="mb-8 bg-slate-800/50 p-6 rounded-2xl border border-slate-700 shadow-xl">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+                        EUROPA v11.0: Logistics Master
+                    </h1>
+                    <p class="text-slate-400 text-sm">31 de Mayo — 02 de Julio | 32 Días de Operación</p>
+                </div>
+                <div class="flex gap-4">
+                    <div class="text-center bg-slate-900/80 p-3 rounded-xl border border-slate-700 min-w-[120px]">
+                        <p class="text-[10px] text-slate-500 font-bold uppercase">Ahorro Estimado</p>
+                        <p class="text-xl font-mono text-emerald-400">€1,100</p>
+                    </div>
+                    <div class="text-center bg-slate-900/80 p-3 rounded-xl border border-slate-700 min-w-[120px]">
+                        <p class="text-[10px] text-slate-500 font-bold uppercase">Presupuesto</p>
+                        <p class="text-xl font-mono text-blue-400">€2,850</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navegación por Pestañas -->
+        <nav class="flex overflow-x-auto border-b border-slate-700 mb-6 no-scrollbar sticky top-0 bg-[#0f172a] z-50">
+            <button onclick="openTab(event, 'espana1')" class="tab-btn active px-4 py-3 text-sm font-bold whitespace-nowrap transition-all flex-1 text-center">
+                [ESPAÑA I] <span class="block text-[10px] opacity-60">31/05-04/06</span>
+            </button>
+            <button onclick="openTab(event, 'portugal')" class="tab-btn px-4 py-3 text-sm font-bold whitespace-nowrap transition-all flex-1 text-center">
+                [PORTUGAL] <span class="block text-[10px] opacity-60">05/06-11/06</span>
+            </button>
+            <button onclick="openTab(event, 'hito')" class="tab-btn px-4 py-3 text-sm font-bold whitespace-nowrap transition-all flex-1 text-center">
+                [EL HITO] <span class="block text-[10px] opacity-60">12/06-14/06</span>
+            </button>
+            <button onclick="openTab(event, 'amsterdam')" class="tab-btn px-4 py-3 text-sm font-bold whitespace-nowrap transition-all flex-1 text-center">
+                [BASE ÁMSTERDAM] <span class="block text-[10px] opacity-60">15/06-23/06</span>
+            </button>
+            <button onclick="openTab(event, 'centroeuropa')" class="tab-btn px-4 py-3 text-sm font-bold whitespace-nowrap transition-all flex-1 text-center">
+                [CENTROEUROPA] <span class="block text-[10px] opacity-60">24/06-02/07</span>
+            </button>
+        </nav>
+
+        <!-- Contenidos -->
+        <main>
+            <!-- [ESPAÑA I] -->
+            <div id="espana1" class="tab-content active space-y-4">
+                <div class="bg-blue-900/10 border-l-4 border-blue-500 p-4 mb-4 rounded-r-xl">
+                    <h2 class="text-xl font-bold text-blue-400">Madrid Clásico</h2>
+                    <p class="text-sm text-slate-400 italic">"Aclimatación y primeras cañas."</p>
+                </div>
+                <div id="container-espana1" class="grid gap-2"></div>
+            </div>
+
+            <!-- [PORTUGAL] -->
+            <div id="portugal" class="tab-content space-y-4">
+                <div class="bg-emerald-900/10 border-l-4 border-emerald-500 p-4 mb-4 rounded-r-xl">
+                    <h2 class="text-xl font-bold text-emerald-400">Ruta Atlántica: Oporto y Lisboa</h2>
+                    <p class="text-sm text-slate-400 italic">"Vinos, fados y azulejos."</p>
+                </div>
+                <div id="container-portugal" class="grid gap-2"></div>
+            </div>
+
+            <!-- [EL HITO] -->
+            <div id="hito" class="tab-content space-y-4">
+                <div class="bg-rose-900/10 border-l-4 border-rose-500 p-4 mb-4 rounded-r-xl">
+                    <h2 class="text-xl font-bold text-rose-400">Madrid: El Evento Central</h2>
+                    <p class="text-sm text-slate-400 italic">"Toda la logística gira en torno a este fin de semana."</p>
+                </div>
+                <div id="container-hito" class="grid gap-2"></div>
+            </div>
+
+            <!-- [BASE ÁMSTERDAM] -->
+            <div id="amsterdam" class="tab-content space-y-4">
+                <div class="bg-teal-900/10 border-l-4 border-teal-500 p-4 mb-4 rounded-r-xl">
+                    <h2 class="text-xl font-bold text-teal-400">Operación Alojamiento Gratis</h2>
+                    <p class="text-sm text-slate-400 italic">"9 noches sin costo de hotel. Base táctica para incursiones a París y Bruselas."</p>
+                </div>
+                <div id="container-amsterdam" class="grid gap-2"></div>
+            </div>
+
+            <!-- [CENTROEUROPA] -->
+            <div id="centroeuropa" class="tab-content space-y-4">
+                <div class="bg-purple-900/10 border-l-4 border-purple-500 p-4 mb-4 rounded-r-xl">
+                    <h2 class="text-xl font-bold text-purple-400">Berlín, Praga y Cierre</h2>
+                    <p class="text-sm text-slate-400 italic">"Intensidad histórica y despedida europea."</p>
+                </div>
+                <div id="container-centroeuropa" class="grid gap-2"></div>
+            </div>
+        </main>
+
+        <footer class="mt-12 text-center text-slate-600 text-[10px] pb-8 border-t border-slate-800 pt-4">
+            ROCKET TRIP PLANNER v11.0 | OPTIMIZADO PARA CONSUMO MÍNIMO DE TOKENS Y MÁXIMA CLARIDAD
+        </footer>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        const tripData = [
+            // ESPAÑA I (Madrid Táctico)
+            { tab: 'espana1', date: '31/05', title: 'Operación Desembarco: Madrid Centro', log: 'Aeropuerto (L8 Metro) -> Estación Sol. Compra Tarjeta Multi en máquinas Metro (2.50€) + 10 viajes (12.20€).', plan: 'Check-in zona Sol/Huertas. Atardecer en Templo de Debod (Gratis). Cena en Mercado de San Miguel (Cuidado con los precios, ve a por la experiencia).', cost: 'Transporte: 14.70€ | Cena: 25€ | Total: 39.70€' },
+            { tab: 'espana1', date: '01/06', title: 'El Eje del Arte y Churros', log: 'A pie. Google Maps: "Chocolatería San Ginés" -> "Museo del Prado".', plan: 'Desayuno: Churros en San Ginés (Comprar ticket en caja primero). Tarde: Museo del Prado (Gratis 18:00-20:00, cola empieza 17:30). Comprar souvenirs en Tienda Museo.', cost: 'Churros: 6€ | Comida Menú del Día: 15€ | Total: 21€' },
+            { tab: 'espana1', date: '02/06', title: 'Picnic Real en El Retiro', log: 'Compra suministros en Mercadona (Calle de Atocha).', plan: 'Mañana: Palacio Real (Reserva online 12€). Tarde: Picnic en El Retiro. Busca el Palacio de Cristal. Alquiler barca: 6€.', cost: 'Tickets: 12€ | Suministros Mercadona: 10€ | Total: 28€' },
+            { tab: 'espana1', date: '03/06', title: 'Malasaña Vintage & Shopping', log: 'Barrio Malasaña (Metro Tribunal).', plan: 'Tiendas: Magpie Vintage (Calle Velarde). Almuerzo: Ramen en Kagura o Tacos en Takos al Pastor (Calle Salud, fila obligatoria). Noche: Cócteles en 1862 Dry Bar.', cost: 'Shopping: Variable | Comida: 12€ | Tragos: 20€ | Total: 32€+' },
+            { tab: 'espana1', date: '04/06', title: 'Preparación Portugal & Last Call', log: 'Lavar ropa en Lavandería Speed Queen (Calle del Olmo).', plan: 'Día de logística. Maleta ligera 10kg. Cena: Tortilla en Pez Tortilla (Calle Pez, pide la de queso de cabra). Prepárate para salida a Oporto.', cost: 'Lavandería: 8€ | Cena: 15€ | Total: 23€' },
+
+            // PORTUGAL (Ruta Atlántica)
+            { tab: 'portugal', date: '05/06', title: 'Madrid -> Oporto: El Puente Dorado', log: 'Vuelo Madrid-Oporto (Ryanair, 1h). Tren Aeropuerto Metro Línea E (Púrpura) -> Estación Bolhão.', plan: 'Caminar por Ribeira. Atardecer en Jardim do Morro (Cruza el Puente Luis I por arriba). Beber vino de Oporto barato en cualquier taberna.', cost: 'Transporte: 45€ (Vuelo) + 2.50€ | Cena: 15€ | Total: 62.50€' },
+            { tab: 'portugal', date: '06/06', title: 'Francesinhas y Azulejos', log: 'A pie. Maps: "Igreja do Carmo" -> "Café Santiago".', plan: 'Ver azulejos en São Bento e Igreja do Carmo. Almuerzo: Francesinha en Café Santiago (La "Bomba" gastronómica). Comprar: Jabones Claus Porto.', cost: 'Francesinha: 12€ | Compras: 15€ | Total: 27€' },
+            { tab: 'portugal', date: '07/06', title: 'Oporto -> Lisboa (Tren Alfa Pendular)', log: 'Tren desde Porto-Campanhã -> Lisboa Santa Apolónia (3h). Comprar en cp.pt con antelación.', plan: 'Check-in Lisboa. Paseo por Praça do Comércio. Noche en Barrio Alto (Pink Street para la foto, beber en la calle es la norma).', cost: 'Tren: 25€ | Drinks: 15€ | Total: 40€' },
+            { tab: 'portugal', date: '08/06', title: 'Operación Belém: Azúcar y Historia', log: 'Tranvía 15E desde Cais do Sodré. Paga con tarjeta bancaria contactless.', plan: 'Pastéis de Belém (Fila de afuera es para comprar, entra para sentarte). Torre de Belém y Padrão dos Descobrimentos. Cena: Bacalhau en Alfama.', cost: 'Pastéis: 6€ | Tranvía: 4€ | Cena: 25€ | Total: 35€' },
+            { tab: 'portugal', date: '09/06', title: 'Sintra: El Palacio de Cuento', log: 'Tren Estación Rossio (40 min). Al llegar, bus 434 (Circuito Pena).', plan: 'Quinta da Regaleira (Los pozos iniciáticos) -> Palacio da Pena (Solo exteriores si quieres ahorrar tiempo). Regreso a Lisboa 19:00.', cost: 'Tren+Bus: 15€ | Tickets: 25€ | Total: 40€' },
+            { tab: 'portugal', date: '10/06', title: 'Miradores de Lisboa & Fado', log: 'Tranvía 28 (Cuidado carteristas). Maps: "Miradouro da Senhora do Monte".', plan: 'Tour de miradores. Santa Justa (No subas al ascensor, ve por detrás gratis). Noche de Fado en Tasca do Chico (Barato y auténtico).', cost: 'Comida: 15€ | Fado: Consumo mínimo | Total: 25€' },
+            { tab: 'portugal', date: '11/06', title: 'Lisboa -> Madrid: El Retorno del Hito', log: 'Vuelo Retorno (TAP/Iberia) o FlixBus Nocturno (Ahorro noche hotel).', plan: 'Mañana de compras: Conservas de pescado en "Loja das Conservas". Última bifana en Plaza Figueira. Salida al aeropuerto.', cost: 'Vuelo/Bus: 50€ | Compras: 20€ | Total: 70€' },
+
+            // EL HITO (El Evento Central)
+            { tab: 'hito', date: '12/06', title: 'Madrid: Operación Recuperación', log: 'Instalación en Base Madrid. Supermercado Día para stock de agua/fruta.', plan: 'Día de hidratación y descanso post-Portugal. Lavandería de nuevo si es necesario. Noche tranquila en Plaza Santa Ana.', cost: 'Supermercado: 20€ | Total: 20€' },
+            { tab: 'hito', date: '13/06', title: 'La Previa del Hito', log: 'Maps: "Cervecería La Blanca Paloma" (Tapas gratis con la caña).', plan: 'Reunión con el equipo. Compra de suministros para el concierto (Powerbank cargada). Cena de carbohidratos (Pasta) para aguantar.', cost: 'Cañas/Tapas: 15€ | Cena: 18€ | Total: 33€' },
+            { tab: 'hito', date: '14/06', title: 'DÍA X: EL CONCIERTO', log: 'Transporte Metro/Bus al recinto. Sigue canales oficiales de seguridad.', plan: 'Evento: Bad Bunny en Madrid. Puertas abren temprano. Lleva calzado cómodo (el que elegiste en el protocolo). Disfruta, Seba.', cost: 'Merchandising: 40€ | Bebidas Recinto: 25€ | Total: 65€' },
+
+            // BASE ÁMSTERDAM (Alojamiento Gratis)
+            { tab: 'amsterdam', date: '15/06', title: 'Madrid -> Ámsterdam: Base Táctica', log: 'Vuelo Barajas -> Schiphol. Tren NS -> Amsterdam Centraal (20 min, 5.90€).', plan: 'Instalación en casa de amiga. Setup de cocina para ahorrar. Caminata nocturna por el Red Light District (Mirar, no tocar).', cost: 'Vuelo: 90€ | Tren: 5.90€ | Cena: 12€ | Total: 107.90€' },
+            { tab: 'amsterdam', date: '16/06', title: 'Ciclismo Urbano & Canales', log: 'Alquiler de Bici en "Black Bikes" o "Yellow Bike" (12-15€/día).', plan: 'Ruta en bici por el Jordaan. Almuerzo: Apple Pie en Winkel 43 (Imprescindible). Tarde: Vondelpark. Compras: Queso Old Amsterdam.', cost: 'Bici: 15€ | Apple Pie: 8€ | Total: 23€' },
+            { tab: 'amsterdam', date: '17/06', title: 'Arte en Museumplein', log: 'Maps: "Rijksmuseum" -> "Van Gogh Museum". Resreva semanas antes.', plan: 'Mañana: Van Gogh Museum. Tarde: Rijksmuseum (Ver "La Ronda de Noche"). Foto con las letras "I amsterdam" (las que quedan en Schiphol o itinerantes).', cost: 'Tickets: 45€ | Snack: 5€ | Total: 50€' },
+            { tab: 'amsterdam', date: '18/06', title: 'Incursión Bruselas (Bélgica)', log: 'Tren FlixTrain o IC (2h 45m). Ida y vuelta el mismo día.', plan: 'Grand Place -> Manneken Pis (es pequeño, no te decepciones). Comer: Gofre de Lieja (con azúcar perlado) y Patatas Fritas en Fritland.', cost: 'Tren i/v: 35€ | Gofres/Fritas: 12€ | Total: 47€' },
+            { tab: 'amsterdam', date: '19/06', title: 'Día de Descanso / Operación Super', log: 'Maps: "Albert Heijn" (Supermercado local).', plan: 'Día de relax. Picnic en los canales. Preparar mochila pequeña para la noche en París. Compra Stroopwafels (souvenir barato y épico).', cost: 'Supermercado: 15€ | Total: 15€' },
+            { tab: 'amsterdam', date: '20/06', title: 'PARÍS ASALTO 1: La Torre', log: 'Tren Eurostar (ex-Thalys) 07:45 -> 11:05. Metro Navigo Easy.', plan: 'Comida: CheZaline (Jambon-Beurre). Tarde: Trocadéro -> Torre Eiffel -> Campo de Marte. Noche: Cena Falafel en Le Marais.', cost: 'Tren: 85€ | Metro: 5€ | Cena: 10€ | Total: 100€' },
+            { tab: 'amsterdam', date: '21/06', title: 'PARÍS ASALTO 2: Montmartre', log: 'Check-out. Metro Línea 2 -> Anvers.', plan: 'Sacré-Cœur (Vistas gratis). Place du Tertre (Pintores). Almuerzo: Crepe callejero. 18:00 Tren de vuelta a Ámsterdam.', cost: 'Almuerzo: 10€ | Tren vuelta: 85€ | Total: 95€' },
+            { tab: 'amsterdam', date: '22/06', title: 'Molinos de Zaanse Schans', log: 'Tren local desde Centraal (15 min).', plan: 'Ver molinos reales, fábricas de zuecos y queserías. Es muy turístico pero visualmente increíble. Regreso 16:00.', cost: 'Tren: 7€ | Entrada Molino: 5€ | Total: 12€' },
+            { tab: 'amsterdam', date: '23/06', title: 'Última Noche en los Canales', log: 'Cena de agradecimiento a tu amiga.', plan: 'Paseo en barco por los canales (15€, mejor al anochecer). Preparar maleta para Centroeuropa (Vuelo temprano).', cost: 'Barco: 15€ | Cena: 30€ | Total: 45€' },
+
+            // CENTROEUROPA (Historia e Intensidad)
+            { tab: 'centroeuropa', date: '24/06', title: 'AMS -> Berlín: Operación Muro', log: 'Tren IC Directo (6h 20m) o Vuelo EasyJet. S-Bahn al centro.', plan: 'Check-in Berlín. Paseo por Alexanderplatz. Cena: Currywurst en Curry 36 (Hito berlinés). Beber cerveza en un Späti (tienda 24h).', cost: 'Transporte: 60€ | Currywurst: 5€ | Total: 65€' },
+            { tab: 'centroeuropa', date: '25/06', title: 'Berlín: Cicatrices de Guerra', log: 'Maps: "Puerta de Brandeburgo" -> "Memorial Holocausto".', plan: 'Mañana: Reichstag (Cúpula gratis, reserva mes antes). Tarde: Topografía del Terror y Checkpoint Charlie. Noche en Kreuzberg.', cost: 'Transporte: 9€ (Pase día) | Almuerzo: 12€ | Total: 21€' },
+            { tab: 'centroeuropa', date: '26/06', title: 'Berlín Alternativo & Arte', log: 'Maps: "East Side Gallery". Metro Línea U1.', plan: 'Caminar los 1.3km del Muro pintado. Mauerpark si es domingo (karaoke y pulgas). Shopping: RAW-Gelände (zona industrial/arte).', cost: 'Comida: 10€ | Varios: 10€ | Total: 20€' },
+            { tab: 'centroeuropa', date: '27/06', title: 'Berlín -> Praga (El Tren Escénico)', log: 'Tren EuroCity (4h 30m). Sigue el curso del río Elba. Vistas top.', plan: 'Llegada a Praga. Plaza Ciudad Vieja (Reloj Astronómico cada hora en punto). Cena: Goulash dentro de un pan. Cerveza checa (Pilsner Urquell).', cost: 'Tren: 20€ | Cena: 18€ | Total: 38€' },
+            { tab: 'centroeuropa', date: '28/06', title: 'Praga: El Castillo y Alquimia', log: 'Cruza el Puente de Carlos antes de las 08:00 AM (Sin gente).', plan: 'Subida al Castillo de Praga. Callejón del Oro (Casa de Kafka). Tarde: Isla de Kampa. Comprar: Cristal de Bohemia o Marionetas.', cost: 'Tickets: 15€ | Snack: 6€ | Total: 21€' },
+            { tab: 'centroeuropa', date: '29/06', title: 'Praga: Barrio Judío & Vistas', log: 'Maps: "Josefov" -> "Monte Petrín".', plan: 'Mañana: Sinagogas y Cementerio Judío. Tarde: Funicular al Monte Petrín (La "Eiffel" checa). Noche: Jazz Club Reduta.', cost: 'Tickets: 20€ | Funicular: 3€ | Total: 23€' },
+            { tab: 'centroeuropa', date: '30/06', title: 'Praga: Despedida Bohemia', log: 'Día libre para "perderse".', plan: 'Paseo por el muro de John Lennon. Comprar Trdelník (el dulce de chimenea) en la calle. Última cena masiva checa.', cost: 'Comida/Dulces: 20€ | Souvenirs: 20€ | Total: 40€' },
+            { tab: 'centroeuropa', date: '01/07', title: 'Operación Retorno: Praga -> Madrid', log: 'Vuelo Praga-Madrid (Iberia/Czech Airlines, 3h).', plan: 'Último café en Praga. Traslado al aeropuerto PRG (Bus 119 + Metro A). Llegada a Madrid, fin de la operación.', cost: 'Vuelo: 120€ | Transporte: 5€ | Total: 125€' },
+            { tab: 'centroeuropa', date: '02/07', title: 'Madrid: Reset Final', log: 'Aclimatación horaria.', plan: 'Día de fotos, backup de nube y planificación de regreso a Chile o siguiente destino.', cost: 'Total: 0€' }
+        ];
+
+        function renderTrip() {
+            tripData.forEach(day => {
+                const container = document.getElementById('container-' + day.tab);
+                if (container) {
+                    const row = document.createElement('div');
+                    row.className = 'day-row bg-slate-800/20 p-3 rounded-lg grid grid-cols-1 md:grid-cols-12 gap-3 items-center';
+                    row.innerHTML = `
+                        <div class="md:col-span-1 text-center border-r border-slate-700 hidden md:block">
+                            <span class="text-xs font-bold text-slate-500">${day.date}</span>
+                        </div>
+                        <div class="md:col-span-3">
+                            <span class="md:hidden text-[10px] font-bold text-blue-400 mr-2">${day.date}</span>
+                            <h4 class="text-sm font-bold inline-block md:block">${day.title}</h4>
+                        </div>
+                        <div class="md:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div class="flex items-start gap-2">
+                                <span class="badge badge-logistic mt-1">LOG</span>
+                                <p class="text-[11px] text-slate-400">${day.log}</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="badge badge-plan mt-1">PLAN</span>
+                                <p class="text-[11px] text-slate-400">${day.plan}</p>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="badge badge-cost mt-1">COST</span>
+                                <p class="text-[11px] text-emerald-500 font-mono">${day.cost}</p>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', renderTrip);
+    </script>
+</body>
+</html>
