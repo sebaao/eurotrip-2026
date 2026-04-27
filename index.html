@@ -1,1001 +1,301 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eurotrip 2026</title>
+    <title>EUROTRIP 2026 | MISSION CONTROL v16.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0f172a; color: #e2e8f0; font-family: sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        .goog-te-banner-frame.skiptranslate { display: none !important; } 
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
+        :root {
+            --glass: rgba(15, 23, 42, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: #020617; 
+            color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(15, 118, 110, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+        .glass { background: var(--glass); backdrop-filter: blur(16px); border: 1px solid var(--border); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn.active { background: #3b82f6; border-color: #60a5fa; color: white; transform: scale(1.05); }
+        .day-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .day-card:hover { background: rgba(51, 65, 85, 0.4); transform: translateY(-4px); }
+        .img-container { position: relative; overflow: hidden; border-radius: 1.5rem; height: 200px; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .day-card:hover .img-container img { transform: scale(1.1); }
+        
+        /* Translate Styling */
+        #google_translate_element { position: fixed; bottom: 20px; right: 20px; z-index: 10000; }
+        .goog-te-gadget-simple { 
+            background: rgba(30, 41, 59, 0.9) !important; 
+            border: 1px solid rgba(255, 255, 255, 0.2) !important; 
+            padding: 10px 15px !important; 
+            border-radius: 99px !important; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important;
+        }
+        .goog-te-gadget-simple span { color: #94a3b8 !important; font-size: 12px !important; font-weight: 800 !important; text-transform: uppercase; }
+        .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon { display: none !important; }
         body { top: 0px !important; }
+
+        .price-badge { font-family: monospace; background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .status-done { border-left: 4px solid #10b981; opacity: 0.7; }
+        .status-pending { border-left: 4px solid #3b82f6; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="min-h-screen">
-    <div id="google_translate_element" class="fixed top-4 right-4 z-50 glass p-2 rounded-lg text-sm"></div>
-    <script>
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({pageLanguage: 'en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
-      }
-    </script>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<body class="p-4 md:p-8 min-h-screen pb-24">
+    <div id="google_translate_element"></div>
 
-    <header class="pt-20 pb-10 px-4 text-center">
-        <h1 class="text-5xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">EUROTRIP 2026 COCKPIT</h1>
-        <p class="text-xl text-slate-400">May 31 - July 2 | 32 Days of Glory</p>
-        <div class="max-w-3xl mx-auto mt-8">
-            <div class="flex justify-between text-sm mb-2 font-bold" id="progress-text">
-                <span>Mission Progress</span><span>0%</span>
+    <div class="max-w-6xl mx-auto">
+        <!-- HEADER -->
+        <header class="glass p-8 md:p-12 rounded-[3rem] mb-10 flex flex-col md:flex-row justify-between items-center gap-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 opacity-5"><i class="fa-solid fa-plane-departure text-9xl"></i></div>
+            <div class="relative z-10">
+                <div class="inline-flex items-center gap-2 bg-blue-500/20 text-blue-400 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase mb-4 border border-blue-500/30">
+                    <span class="flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span></span>
+                    Telemetry Active • v16.0
+                </div>
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tighter leading-none">EUROTRIP <span class="text-blue-500">2026</span></h1>
+                <p class="text-slate-400 mt-4 text-lg font-medium">Seba & Tavi • 32 Days of Perfect Logistics</p>
             </div>
-            <div class="w-full bg-slate-800 rounded-full h-4 border border-slate-700">
-                <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-emerald-500 h-4 rounded-full" style="width: 0%"></div>
+            
+            <div class="flex flex-wrap gap-4 relative z-10 justify-center">
+                <div class="glass px-8 py-5 rounded-3xl text-center border-emerald-500/20">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">Budget</p>
+                    <p class="text-3xl font-bold text-emerald-400">€2,850</p>
+                </div>
+                <div class="glass px-8 py-5 rounded-3xl text-center border-blue-500/20">
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-1">Misión</p>
+                    <p id="main-progress" class="text-3xl font-bold text-blue-400">0%</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD GRID -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-10">
+            <!-- SIDEBAR -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- SOS -->
+                <div class="glass p-6 rounded-[2rem] border-rose-500/20">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-shield-heart text-rose-500"></i> SOS & Utility
+                    </h3>
+                    <div class="space-y-3">
+                        <a href="tel:112" class="flex justify-between items-center bg-rose-500/10 p-3 rounded-2xl border border-rose-500/20 hover:bg-rose-500/20 transition">
+                            <span class="text-xs font-bold">EMERGENCY EU</span>
+                            <span class="text-rose-500 font-black">112</span>
+                        </a>
+                        <div class="p-3 bg-slate-900/50 rounded-2xl border border-slate-700/50 text-[10px] leading-tight">
+                            <p class="text-slate-500 font-bold mb-1 uppercase">Passport Status</p>
+                            <p class="text-emerald-400 font-bold">CHILE: 90 DAYS FREE</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUICK VAULT -->
+                <div class="glass p-6 rounded-[2rem]">
+                    <h3 class="text-xs font-black text-slate-500 uppercase tracking-widest mb-4">Document Vault</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="bg-slate-800 p-4 rounded-2xl hover:bg-blue-900/40 transition border border-slate-700 flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-plane-up text-blue-400"></i>
+                            <span class="text-[9px] font-black uppercase">Flights</span>
+                        </button>
+                        <button class="bg-slate-800 p-4 rounded-2xl hover:bg-purple-900/40 transition border border-slate-700 flex flex-col items-center gap-2">
+                            <i class="fa-solid fa-hotel text-purple-400"></i>
+                            <span class="text-[9px] font-black uppercase">Hotels</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <div class="lg:col-span-3">
+                <nav class="flex gap-2 overflow-x-auto pb-6 mb-6 no-scrollbar sticky top-4 z-50">
+                    <button onclick="openTab(event, 'phase1')" class="tab-btn active glass px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap uppercase tracking-widest transition-all">PH I: Madrid</button>
+                    <button onclick="openTab(event, 'phase2')" class="tab-btn glass px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap uppercase tracking-widest transition-all">PH II: Portugal</button>
+                    <button onclick="openTab(event, 'phase3')" class="tab-btn glass px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap uppercase tracking-widest transition-all">PH III: The Hito</button>
+                    <button onclick="openTab(event, 'phase4')" class="tab-btn glass px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap uppercase tracking-widest transition-all">PH IV: Paris & Berlin</button>
+                    <button onclick="openTab(event, 'phase5')" class="tab-btn glass px-8 py-4 rounded-2xl font-black text-[10px] whitespace-nowrap uppercase tracking-widest transition-all">PH V: Ams & Final</button>
+                </nav>
+
+                <div id="itinerary-grid" class="space-y-8">
+                    <div id="phase1" class="tab-content active space-y-6"></div>
+                    <div id="phase2" class="tab-content space-y-6"></div>
+                    <div id="phase3" class="tab-content space-y-6"></div>
+                    <div id="phase4" class="tab-content space-y-6"></div>
+                    <div id="phase5" class="tab-content space-y-6"></div>
+                </div>
             </div>
         </div>
-    </header>
 
-    <main class="max-w-7xl mx-auto px-4 pb-20">
-        <section class="glass rounded-2xl p-6 mb-12">
-            <h2 class="text-2xl font-bold mb-6 border-b border-slate-700 pb-2">Ultimate Idiot-Proof Checklist</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div><h3 class="text-emerald-400 font-bold mb-3">1. Documents & Comms</h3>
-                    <ul class="space-y-2 text-sm"><li><input type="checkbox" class="mr-2"> Passports</li><li><input type="checkbox" class="mr-2"> Flights</li><li><input type="checkbox" class="mr-2"> eSIM</li><li><input type="checkbox" class="mr-2"> Event Tickets</li></ul>
-                </div>
-                <div><h3 class="text-blue-400 font-bold mb-3">2. Money & Cards</h3>
-                    <ul class="space-y-2 text-sm"><li><input type="checkbox" class="mr-2"> Revolut</li><li><input type="checkbox" class="mr-2"> Backup CC</li><li><input type="checkbox" class="mr-2"> Cash</li><li><input type="checkbox" class="mr-2"> Apple Pay</li></ul>
-                </div>
-                <div><h3 class="text-purple-400 font-bold mb-3">3. Gear & Tech</h3>
-                    <ul class="space-y-2 text-sm"><li><input type="checkbox" class="mr-2"> Powerbank</li><li><input type="checkbox" class="mr-2"> EU Adapters</li><li><input type="checkbox" class="mr-2"> Shoes</li><li><input type="checkbox" class="mr-2"> Headphones</li></ul>
-                </div>
-                <div><h3 class="text-rose-400 font-bold mb-3">4. Health & Safety</h3>
-                    <ul class="space-y-2 text-sm"><li><input type="checkbox" class="mr-2"> Insurance</li><li><input type="checkbox" class="mr-2"> Meds</li><li><input type="checkbox" class="mr-2"> Hydration</li><li><input type="checkbox" class="mr-2"> Emergency Contacts</li></ul>
-                </div>
+        <!-- FULL CHECKLIST -->
+        <section class="glass p-10 md:p-16 rounded-[4rem] mb-20">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-black mb-12 text-center">Ultimate <span class="text-blue-500">Checklist</span></h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-16" id="checklist-render"></div>
             </div>
         </section>
-        
-        <h2 class="text-3xl font-bold mb-8 text-center">The 32-Day Itinerary</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-1">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1539037116277-4db20d04bf2d?auto=format&fit=crop&w=800&q=80" alt="Madrid (Landing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 1</span>
-                        <h3 class="text-2xl font-bold mt-1">Madrid (Landing)</h3>
-                        <p class="text-slate-300 text-sm">Sun, May 31</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="1">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Touchdown in Madrid! Get through customs, grab SIM card/eSIM.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-2">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1539037116277-4db20d04bf2d?auto=format&fit=crop&w=800&q=80" alt="Madrid (Landing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 2</span>
-                        <h3 class="text-2xl font-bold mt-1">Madrid (Landing)</h3>
-                        <p class="text-slate-300 text-sm">Mon, Jun 1</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="2">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Madrid (Landing).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-3">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80" alt="Portugal - Alentejo" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 3</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Alentejo</h3>
-                        <p class="text-slate-300 text-sm">Tue, Jun 2</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="3">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Alentejo.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-4">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80" alt="Portugal - Alentejo" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 4</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Alentejo</h3>
-                        <p class="text-slate-300 text-sm">Wed, Jun 3</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="4">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Alentejo.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-5">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80" alt="Portugal - Alentejo" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 5</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Alentejo</h3>
-                        <p class="text-slate-300 text-sm">Thu, Jun 4</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="5">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Alentejo.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-6">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1503177847378-d2048487fa46?auto=format&fit=crop&w=800&q=80" alt="Portugal - Lisbon" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 6</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Lisbon</h3>
-                        <p class="text-slate-300 text-sm">Fri, Jun 5</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="6">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Lisbon.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-7">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1503177847378-d2048487fa46?auto=format&fit=crop&w=800&q=80" alt="Portugal - Lisbon" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 7</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Lisbon</h3>
-                        <p class="text-slate-300 text-sm">Sat, Jun 6</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="7">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Lisbon.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-8">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1503177847378-d2048487fa46?auto=format&fit=crop&w=800&q=80" alt="Portugal - Lisbon" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 8</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Lisbon</h3>
-                        <p class="text-slate-300 text-sm">Sun, Jun 7</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="8">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Lisbon.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-9">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1555529733-0e670560f8e1?auto=format&fit=crop&w=800&q=80" alt="Portugal - Porto" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 9</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Porto</h3>
-                        <p class="text-slate-300 text-sm">Mon, Jun 8</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="9">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Porto.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-10">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1555529733-0e670560f8e1?auto=format&fit=crop&w=800&q=80" alt="Portugal - Porto" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 10</span>
-                        <h3 class="text-2xl font-bold mt-1">Portugal - Porto</h3>
-                        <p class="text-slate-300 text-sm">Tue, Jun 9</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="10">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Portugal - Porto.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-11">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80" alt="Madrid (Bad Bunny)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 11</span>
-                        <h3 class="text-2xl font-bold mt-1">Madrid (Bad Bunny)</h3>
-                        <p class="text-slate-300 text-sm">Wed, Jun 10</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="11">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Madrid (Bad Bunny).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-12">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80" alt="Madrid (Bad Bunny)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 12</span>
-                        <h3 class="text-2xl font-bold mt-1">Madrid (Bad Bunny)</h3>
-                        <p class="text-slate-300 text-sm">Thu, Jun 11</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="12">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Madrid (Bad Bunny).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> 🔥 THE EVENT: Bad Bunny Concert! Secure tickets and arrive early. Mosh pit survival mode.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Stay hydrated, bring power bank.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-13">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80" alt="Madrid (Bad Bunny)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 13</span>
-                        <h3 class="text-2xl font-bold mt-1">Madrid (Bad Bunny)</h3>
-                        <p class="text-slate-300 text-sm">Fri, Jun 12</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="13">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Madrid (Bad Bunny).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-14">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e907a5ea82c?auto=format&fit=crop&w=800&q=80" alt="Paris" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 14</span>
-                        <h3 class="text-2xl font-bold mt-1">Paris</h3>
-                        <p class="text-slate-300 text-sm">Sat, Jun 13</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="14">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Paris.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-15">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e907a5ea82c?auto=format&fit=crop&w=800&q=80" alt="Paris" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 15</span>
-                        <h3 class="text-2xl font-bold mt-1">Paris</h3>
-                        <p class="text-slate-300 text-sm">Sun, Jun 14</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="15">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Paris.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-16">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e907a5ea82c?auto=format&fit=crop&w=800&q=80" alt="Paris" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 16</span>
-                        <h3 class="text-2xl font-bold mt-1">Paris</h3>
-                        <p class="text-slate-300 text-sm">Mon, Jun 15</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="16">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Paris.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-17">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e907a5ea82c?auto=format&fit=crop&w=800&q=80" alt="Paris" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 17</span>
-                        <h3 class="text-2xl font-bold mt-1">Paris</h3>
-                        <p class="text-slate-300 text-sm">Tue, Jun 16</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="17">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Paris.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-18">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1502602898657-3e907a5ea82c?auto=format&fit=crop&w=800&q=80" alt="Paris" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 18</span>
-                        <h3 class="text-2xl font-bold mt-1">Paris</h3>
-                        <p class="text-slate-300 text-sm">Wed, Jun 17</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="18">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Paris.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-19">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=80" alt="Berlin" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 19</span>
-                        <h3 class="text-2xl font-bold mt-1">Berlin</h3>
-                        <p class="text-slate-300 text-sm">Thu, Jun 18</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="19">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Berlin.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-20">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=80" alt="Berlin" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 20</span>
-                        <h3 class="text-2xl font-bold mt-1">Berlin</h3>
-                        <p class="text-slate-300 text-sm">Fri, Jun 19</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="20">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Berlin.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-21">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=80" alt="Berlin" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 21</span>
-                        <h3 class="text-2xl font-bold mt-1">Berlin</h3>
-                        <p class="text-slate-300 text-sm">Sat, Jun 20</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="21">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Berlin.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-22">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=80" alt="Berlin" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 22</span>
-                        <h3 class="text-2xl font-bold mt-1">Berlin</h3>
-                        <p class="text-slate-300 text-sm">Sun, Jun 21</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="22">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Berlin.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-23">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=800&q=80" alt="Berlin" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 23</span>
-                        <h3 class="text-2xl font-bold mt-1">Berlin</h3>
-                        <p class="text-slate-300 text-sm">Mon, Jun 22</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="23">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Berlin.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-24">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=800&q=80" alt="Amsterdam" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 24</span>
-                        <h3 class="text-2xl font-bold mt-1">Amsterdam</h3>
-                        <p class="text-slate-300 text-sm">Tue, Jun 23</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="24">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Amsterdam.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-25">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=800&q=80" alt="Amsterdam" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 25</span>
-                        <h3 class="text-2xl font-bold mt-1">Amsterdam</h3>
-                        <p class="text-slate-300 text-sm">Wed, Jun 24</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="25">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Amsterdam.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-26">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=800&q=80" alt="Amsterdam" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 26</span>
-                        <h3 class="text-2xl font-bold mt-1">Amsterdam</h3>
-                        <p class="text-slate-300 text-sm">Thu, Jun 25</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="26">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Amsterdam.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-27">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=800&q=80" alt="Amsterdam" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 27</span>
-                        <h3 class="text-2xl font-bold mt-1">Amsterdam</h3>
-                        <p class="text-slate-300 text-sm">Fri, Jun 26</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="27">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Amsterdam.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-28">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1534351590666-13e3e96b5017?auto=format&fit=crop&w=800&q=80" alt="Amsterdam" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 28</span>
-                        <h3 class="text-2xl font-bold mt-1">Amsterdam</h3>
-                        <p class="text-slate-300 text-sm">Sat, Jun 27</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="28">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Amsterdam.</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-29">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80" alt="Prague (Closing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 29</span>
-                        <h3 class="text-2xl font-bold mt-1">Prague (Closing)</h3>
-                        <p class="text-slate-300 text-sm">Sun, Jun 28</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="29">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Prague (Closing).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-30">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80" alt="Prague (Closing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 30</span>
-                        <h3 class="text-2xl font-bold mt-1">Prague (Closing)</h3>
-                        <p class="text-slate-300 text-sm">Mon, Jun 29</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="30">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Prague (Closing).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-31">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80" alt="Prague (Closing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 31</span>
-                        <h3 class="text-2xl font-bold mt-1">Prague (Closing)</h3>
-                        <p class="text-slate-300 text-sm">Tue, Jun 30</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="31">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Prague (Closing).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-            <div class="glass rounded-2xl overflow-hidden day-card flex flex-col relative" id="day-32">
-                <div class="h-48 w-full bg-slate-800 relative">
-                    <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80" alt="Prague (Closing)" class="w-full h-full object-cover opacity-60">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4">
-                        <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">Day 32</span>
-                        <h3 class="text-2xl font-bold mt-1">Prague (Closing)</h3>
-                        <p class="text-slate-300 text-sm">Wed, Jul 1</p>
-                    </div>
-                    <div class="absolute top-4 right-4">
-                        <label class="flex items-center space-x-2 bg-slate-900/80 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-slate-800 border border-slate-600">
-                            <input type="checkbox" class="day-toggle w-5 h-5 accent-emerald-500" data-day="32">
-                            <span class="text-xs font-bold text-slate-200">Mission Done</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="p-6 flex-1 flex flex-col space-y-4 text-sm">
-                    <div><span class="text-yellow-400 font-bold">🌅 Morning:</span> Morning exploration in Prague (Closing).</div>
-                    <div><span class="text-orange-400 font-bold">☀️ Afternoon:</span> Sightseeing</div>
-                    <div><span class="text-purple-400 font-bold">🌙 Night:</span> Dinner at a local spot.</div>
-                    <div class="border-t border-slate-700 pt-3 mt-auto">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Transport</span>Use local transit.</div>
-                            <div><span class="block text-slate-400 text-xs uppercase mb-1">Food</span>Local dish</div>
-                        </div>
-                        <div class="mt-3"><span class="block text-slate-400 text-xs uppercase mb-1">Pro Tip</span>Keep belongings secure.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+
+        <footer class="text-center text-slate-700 text-[10px] font-black uppercase tracking-[1em] pb-10">
+            Designed for Seba & Tavi • v16.0 Tactical Release
+        </footer>
+    </div>
+
     <script>
-        const toggles = document.querySelectorAll('.day-toggle');
-        const pb = document.getElementById('progress-bar');
-        const pt = document.getElementById('progress-text').querySelector('span:nth-child(2)');
-        function up() {
-            const c = document.querySelectorAll('.day-toggle:checked').length;
-            const p = Math.round((c / 32) * 100);
-            pb.style.width = p + '%'; pt.innerText = p + '%';
+        const tripData = [
+            { phase: 'phase1', date: '31/05', title: 'Operación Barajas', city: 'Madrid', log: 'Metro L8 -> Centro Sol. Tarjeta Multi: €12.', journey: 'Morning: Land at Barajas & check-in. Afternoon: Explore Puerta del Sol. Evening: Welcome dinner at El Brillante (Calamari sandwich).', tip: 'Get the Multi Card at the airport for all metro trips.', map: 'https://maps.app.goo.gl/9Z1J3', cost: '€75', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase1', date: '01/06', title: 'Eje del Arte', city: 'Madrid', log: 'A pie. Museos Prado/Reina Sofía.', journey: 'Morning: Prado Museum (book in advance). Afternoon: Reina Sofía & Atocha area. Evening: Tapas tour at Mercado San Miguel.', tip: 'Prado is free from 18:00 to 20:00, but the queue is huge.', map: 'https://maps.app.goo.gl/madrid1', cost: '€60', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase1', date: '02/06', title: 'Reencuentro Tavi', city: 'Madrid', log: 'Paseo por Retiro.', journey: 'Morning: Pick up Tavi. Afternoon: Relax at El Retiro Park. Evening: Sunset drinks and dinner in Malasaña (Pez Tortilla).', tip: 'Try the tortilla de patatas at Pez Tortilla, it is legendary.', map: 'https://maps.app.goo.gl/retiro', cost: '€85', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '03/06', title: 'Ruta al Oeste', city: 'Alentejo', log: 'Bus/Tren Madrid-Lisboa-Évora.', journey: 'Morning: High-speed train to Portugal. Afternoon: Explore the Roman Temple of Évora. Evening: Wine tasting and local cheese dinner.', tip: 'Évora is very hot; stay hydrated and seek shade.', map: 'https://maps.app.goo.gl/evora', cost: '€80', img: 'https://images.unsplash.com/photo-1580237541049-2d715a09486e?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '04/06', title: 'Costa Vicentina I', city: 'Aljezur', log: 'Alquiler coche/Furgoneta.', journey: 'Morning: Pick up rental car. Afternoon: Drive to Aljezur and explore Arrifana beach. Evening: Fresh grilled fish at a local tavern.', tip: 'A rental car is essential for this part of the trip.', map: 'https://maps.app.goo.gl/aljezur', cost: '€90', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '05/06', title: 'Acantilados y Surf', city: 'Sagres', log: 'Roadtrip por la costa.', journey: 'Morning: Visit the Sagres Fortress. Afternoon: Surf lesson at Beliche beach. Evening: Sunset at Cape Saint Vincent (the end of the world).', tip: 'The wind at the Cape can be very strong and cold.', map: 'https://maps.app.goo.gl/sagres', cost: '€85', img: 'https://images.unsplash.com/photo-1518652391039-38914092b36e?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '06/06', title: 'Lisboa: Barrio Alto', city: 'Lisboa', log: 'Tram 28. Caminar mucho.', journey: 'Morning: Iconic Tram 28 ride. Afternoon: Walk through Alfama districts. Evening: Fado music and drinks in Bairro Alto.', tip: 'Watch out for pickpockets on the popular tram routes.', map: 'https://maps.app.goo.gl/lisbon', cost: '€95', img: 'https://images.unsplash.com/photo-1562184552-997c461abbe6?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '07/06', title: 'Sintra: Cuento de Hadas', city: 'Sintra', log: 'Tren desde Rossio (40min).', journey: 'Morning: Pena Palace (early arrival). Afternoon: Quinta da Regaleira & initiation well. Evening: Pastéis de Belém on the way back.', tip: 'Buy palace tickets online to skip the massive queues.', map: 'https://maps.app.goo.gl/sintra', cost: '€100', img: 'https://images.unsplash.com/photo-1523456761036-70e93240e34c?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '08/06', title: 'Oporto: Ribeira', city: 'Porto', log: 'Tren Alfa Pendular.', journey: 'Morning: Train to Porto. Afternoon: Walk the Ribeira and cross Dom Luís I Bridge. Evening: Francesinha dinner at Lado B.', tip: 'Wear shoes with good grip; the stone streets are slippery.', map: 'https://maps.app.goo.gl/porto', cost: '€90', img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase2', date: '09/06', title: 'Bodegas y Puentes', city: 'Porto', log: 'Caminar por Vila Nova de Gaia.', journey: 'Morning: Visit Livraria Lello. Afternoon: Port wine cellar tour in Gaia. Evening: River cruise at sunset.', tip: 'Book the library visit weeks in advance.', map: 'https://maps.app.goo.gl/gaia', cost: '€85', img: 'https://images.unsplash.com/photo-1522036417753-311ba0da2635?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase3', date: '10/06', title: 'Retorno Táctico', city: 'Madrid', log: 'Vuelo Low Cost OPO-MAD.', journey: 'Morning: Last breakfast in Porto. Afternoon: Flight back to Madrid & check-in. Evening: Casual dinner in La Latina.', tip: 'Check baggage limits for low-cost flights like Ryanair/Vueling.', map: 'https://maps.app.goo.gl/madrid3', cost: '€70', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase3', date: '11/06', title: 'Preparativos Hito', city: 'Madrid', log: 'Descanso / Lavandería.', journey: 'Morning: Laundry and logistics. Afternoon: Shopping on Gran Vía. Evening: Movie night or chill at the hotel.', tip: 'Use "Lavandería Autoservicio" to save on hotel costs.', map: 'https://maps.app.goo.gl/madrid4', cost: '€50', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase3', date: '12/06', title: 'Día de Estadio I', city: 'Madrid', log: 'Metro Línea 7.', journey: 'Morning: Relaxed breakfast. Afternoon: Visit the Metropolitano Stadium area. Evening: Dinner with other fans.', tip: 'The area around the stadium gets very crowded early.', map: 'https://maps.app.goo.gl/stadium', cost: '€60', img: 'https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase3', date: '13/06', title: 'Calma antes de la Tormenta', city: 'Madrid', log: 'Pícnic en el Templo de Debod.', journey: 'Morning: Buy supplies for picnic. Afternoon: Chill at Temple of Debod. Evening: Early night to be ready for the big day.', tip: 'Debod is the best spot for sunset in Madrid.', map: 'https://maps.app.goo.gl/debod', cost: '€55', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase3', date: '14/06', title: 'EL HITO: BAD BUNNY', city: 'Madrid', log: 'Incursión Estadio Metropolitano.', journey: 'Morning: Final prep & hydration. Afternoon: Head to the stadium. Evening: The main event - Bad Bunny live!', tip: 'Keep your digital tickets offline in case of no signal.', map: 'https://maps.app.goo.gl/metropolitano', cost: '€120', img: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '15/06', title: 'Resaca & París', city: 'París', log: 'Vuelo MAD-ORY (Orly).', journey: 'Morning: Sleep in. Afternoon: Flight to Paris. Evening: Walk by the Seine and first French crepe.', tip: 'Orly is closer to the city than CDG; use the Orlyval.', map: 'https://maps.app.goo.gl/paris1', cost: '€110', img: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '16/06', title: 'Montmartre y Bohemios', city: 'París', log: 'Metro Navigo Easy.', journey: 'Morning: Sacré-Cœur basilica. Afternoon: Explore Montmartre art stalls. Evening: Dinner at a cozy bistro.', tip: 'Sacré-Cœur has the best free view of Paris.', map: 'https://maps.app.goo.gl/montmartre', cost: '€100', img: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '17/06', title: 'Canal Saint-Martin', city: 'París', log: 'Paseo en bici (Velib).', journey: 'Morning: Picnic supplies from a boulangerie. Afternoon: Cycling along Canal Saint-Martin. Evening: Drinks with locals by the water.', tip: 'Rent a Velib bike for an authentic Parisian experience.', map: 'https://maps.app.goo.gl/canal', cost: '€90', img: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '18/06', title: 'Louvre & Tullerías', city: 'París', log: 'Caminar por el Sena.', journey: 'Morning: Louvre Museum (the fast route). Afternoon: Relax in Tuileries Garden. Evening: Eiffel Tower sparkling lights.', tip: 'The Eiffel Tower sparkles every hour on the hour at night.', map: 'https://maps.app.goo.gl/louvre', cost: '€105', img: 'https://images.unsplash.com/photo-1541343672885-9be56236302a?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '19/06', title: 'Incursión Alemana', city: 'Freiburg', log: 'TGV Paris-Strasbourg + Tren.', journey: 'Morning: TGV train to Strasbourg. Afternoon: Cross into Germany to Freiburg. Evening: Dinner at a traditional brauhaus.', tip: 'Strasbourg is a great 2-hour stopover for lunch.', map: 'https://maps.app.goo.gl/freiburg', cost: '€85', img: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '20/06', title: 'Senderos Densos', city: 'Titisee', log: 'Tren Regional (Gratis con hotel).', journey: 'Morning: Train to Titisee Lake. Afternoon: Hike around the lake. Evening: Black Forest cake for dessert.', tip: 'The KONUS card (free with accommodation) covers all local trains.', map: 'https://maps.app.goo.gl/titisee', cost: '€70', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '21/06', title: 'Triberg: Cascadas', city: 'Triberg', log: 'Exploración bosque profundo.', journey: 'Morning: Visit Germany\'s highest waterfalls. Afternoon: See the world\'s largest Cuckoo Clock. Evening: Quiet night in the woods.', tip: 'Buy nuts to feed the squirrels at the waterfalls.', map: 'https://maps.app.goo.gl/triberg', cost: '€75', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '22/06', title: 'Berlín: Historia Viva', city: 'Berlín', log: 'ICE Tren Alta Velocidad.', journey: 'Morning: High-speed ICE train to Berlin. Afternoon: Visit Brandenburg Gate. Evening: Currywurst dinner at Curry 36.', tip: 'Berlin is huge; use the U-Bahn/S-Bahn constantly.', map: 'https://maps.app.goo.gl/berlin', cost: '€85', img: 'https://images.unsplash.com/photo-1560969184-10fe8719e047?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '23/06', title: 'Raves & Muros', city: 'Berlín', log: 'U-Bahn 24h.', journey: 'Morning: East Side Gallery (Berlin Wall). Afternoon: Checkpoint Charlie and Museum Island. Evening: Explore the nightlife in Kreuzberg.', tip: 'The East Side Gallery is better visited early to avoid crowds.', map: 'https://maps.app.goo.gl/eastside', cost: '€80', img: 'https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase4', date: '24/06', title: 'Tempelhof: Picnic', city: 'Berlín', log: 'Alquiler de patines/bici.', journey: 'Morning: Sunday market at Mauerpark. Afternoon: Picnic at the former Tempelhof Airport. Evening: Last Berlin beer.', tip: 'Tempelhof is perfect for sunset and people-watching.', map: 'https://maps.app.goo.gl/tempelhof', cost: '€70', img: 'https://images.unsplash.com/photo-1599946347371-68eb71b16afc?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '25/06', title: 'Canales y Puentes', city: 'Ámsterdam', log: 'Tren Berlin-Amsterdam.', journey: 'Morning: Scenic train ride. Afternoon: Check-in and canal walk. Evening: Dinner at Foodhallen.', tip: 'Rent a bike only if you are confident; traffic is intense.', map: 'https://maps.app.goo.gl/ams', cost: '€110', img: 'https://images.unsplash.com/photo-1512470876302-972faa2aa9a4?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '26/06', title: 'Bici en los Polders', city: 'Zaanse Schans', log: 'Bici hacia el norte.', journey: 'Morning: Train to Zaanse Schans. Afternoon: Windmills and cheese tasting. Evening: Back to Amsterdam for night canals.', tip: 'Zaanse Schans is free to enter, but windmills cost extra.', map: 'https://maps.app.goo.gl/windmills', cost: '€95', img: 'https://images.unsplash.com/photo-1534384323796-75950ad5ee54?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '27/06', title: 'Vondelpark & Relax', city: 'Ámsterdam', log: 'Tranvía.', journey: 'Morning: Anne Frank House (if booked). Afternoon: Vondelpark picnic. Evening: Farewell dinner in Jordaan.', tip: 'Book Anne Frank House exactly 6 weeks in advance at 10 AM.', map: 'https://maps.app.goo.gl/vondel', cost: '€100', img: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '28/06', title: 'Regreso al Origen', city: 'Madrid', log: 'Vuelo AMS-MAD.', journey: 'Morning: Final stroopwafel. Afternoon: Flight to Madrid. Evening: Tapas in La Latina.', tip: 'Arrive at Schiphol 3 hours early; security can be slow.', map: 'https://maps.app.goo.gl/latina', cost: '€90', img: 'https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '29/06', title: 'Compras Rastro', city: 'Madrid', log: 'Caminar por Embajadores.', journey: 'Morning: Explore El Rastro flea market. Afternoon: Shopping in Chueca. Evening: Vermouth and tapas.', tip: 'The best treasures at El Rastro are in the side streets.', map: 'https://maps.app.goo.gl/rastro', cost: '€60', img: 'https://images.unsplash.com/photo-1549144411-97cbb1926f7d?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '30/06', title: 'Despedida Seba', city: 'Madrid', log: 'Chill en Casa de Campo.', journey: 'Morning: Cable car to Casa de Campo. Afternoon: Relax by the lake. Evening: Final big Spanish dinner.', tip: 'The Teleférico offers great views of the Royal Palace.', map: 'https://maps.app.goo.gl/casacampo', cost: '€65', img: 'https://images.unsplash.com/photo-1510672981848-a1c4f1cb5ccf?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '01/07', title: 'Logística Final', city: 'Madrid', log: 'Check-in JFK.', journey: 'Morning: Souvenir shopping. Afternoon: Pack and check documents. Evening: Last churros at San Ginés.', tip: 'San Ginés is open 24 hours; go late to avoid the line.', map: 'https://maps.app.goo.gl/madridfinal', cost: '€50', img: 'https://images.unsplash.com/photo-1543783232-260bc8c4161b?auto=format&fit=crop&w=1200&q=80' },
+            { phase: 'phase5', date: '02/07', title: 'Salida MAD-JFK', city: 'Aeropuerto', log: 'Taxi/Uber a T4.', journey: 'Morning: Head to Barajas Terminal 4. Afternoon: Flight to JFK. Evening: Arrival in NYC.', tip: 'T4 is beautiful but huge; allow extra time to reach your gate.', map: 'https://maps.app.goo.gl/t4', cost: '€40', img: 'https://images.unsplash.com/photo-1436491865332-7a61a109c0f2?auto=format&fit=crop&w=1200&q=80' }
+        ];
+
+        const checklist = {
+            "Combat Essentials": ["Passport (+ Cloud Copy)", "AirTags (inside bags)", "eSim App (Airalo)", "Universal Adapter", "Powerbank 20k mAh"],
+            "Higiene & Health": ["Ibuprofen/Meds", "Solid Soap/Shampoo", "Microfiber Toall", "Sunscreen 50+", "Earplugs (for planes)"],
+            "Tech Command": ["Cables (USB-C/Light)", "Noise Cancel Phones", "Offline Maps DL", "Ziploc bags (Liquids)"],
+            "Survival": ["Comfy Walking Shoes", "Refillable Bottle", "Printed Emergency Contacts", "Small Rain Poncho"]
+        };
+
+        function openTab(evt, phaseId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(phaseId).classList.add('active');
+            evt.currentTarget.classList.add('active');
         }
-        toggles.forEach(t => t.addEventListener('change', up));
+
+        function toggleDay(date) {
+            const current = localStorage.getItem('trip-' + date) === 'done' ? 'pending' : 'done';
+            localStorage.setItem('trip-' + date, current);
+            render();
+        }
+
+        function render() {
+            const phases = ['phase1', 'phase2', 'phase3', 'phase4', 'phase5'];
+            phases.forEach(p => document.getElementById(p).innerHTML = '');
+
+            let doneCount = 0;
+            tripData.forEach(day => {
+                const isDone = localStorage.getItem('trip-' + day.date) === 'done';
+                if(isDone) doneCount++;
+                const container = document.getElementById(day.phase);
+                if(!container) return;
+
+                container.innerHTML += `
+                    <div class="glass p-6 md:p-8 rounded-[2.5rem] day-card ${isDone ? 'status-done' : 'status-pending'} cursor-pointer" onclick="toggleDay('${day.date}')">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                            <div class="md:col-span-4">
+                                <div class="img-container">
+                                    <img src="${day.img}" alt="${day.city}">
+                                    <div class="absolute top-4 left-4 glass px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">${day.date}</div>
+                                </div>
+                            </div>
+                            <div class="md:col-span-8 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h3 class="text-3xl font-extrabold tracking-tighter">${day.title}</h3>
+                                            <p class="text-blue-400 font-bold text-xs uppercase tracking-[0.2em] mt-1">${day.city}</p>
+                                        </div>
+                                        <span class="price-badge px-4 py-1.5 rounded-full text-xs font-bold">${day.cost}</span>
+                                    </div>
+                                    <p class="text-slate-300 text-sm font-medium leading-relaxed mb-6">${day.journey}</p>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                            <p class="text-[8px] font-black text-blue-500 uppercase tracking-widest mb-2">Transporte</p>
+                                            <p class="text-[11px] font-medium text-slate-200">${day.log}</p>
+                                        </div>
+                                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                            <p class="text-[8px] font-black text-amber-500 uppercase tracking-widest mb-2">Tip de Local</p>
+                                            <p class="text-[11px] font-medium text-slate-200 italic">"${day.tip}"</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex items-center justify-between">
+                                    <a href="${day.map}" target="_blank" onclick="event.stopPropagation()" class="inline-flex items-center gap-2 text-[10px] font-black uppercase text-blue-400 hover:text-white transition">
+                                        <i class="fa-solid fa-map-location-dot"></i> Open in Maps
+                                    </a>
+                                    <div class="text-[9px] font-black uppercase ${isDone ? 'text-emerald-400' : 'text-slate-500'}">
+                                        ${isDone ? '<i class="fa-solid fa-circle-check"></i> MISSION DONE' : '<i class="fa-solid fa-circle-notch fa-spin"></i> PENDING'}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('main-progress').innerText = Math.round((doneCount / tripData.length) * 100) + '%';
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklist-render');
+            for(const [cat, items] of Object.entries(checklist)) {
+                let html = `<div class="space-y-6">
+                    <h4 class="text-xs font-black text-blue-500 uppercase tracking-[0.3em] border-b border-white/10 pb-4">${cat}</h4>
+                    <div class="space-y-4">`;
+                items.forEach(item => {
+                    html += `
+                        <div class="flex items-center gap-4 group cursor-pointer">
+                            <input type="checkbox" class="w-5 h-5 rounded-lg border-white/20 bg-slate-900 text-blue-500 focus:ring-0">
+                            <label class="text-sm font-bold text-slate-400 group-hover:text-white transition">${item}</label>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+                container.innerHTML += html;
+            }
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({pageLanguage: 'es', includedLanguages: 'en,es', layout: google.translate.TranslateElement.InlineLayout.SIMPLE}, 'google_translate_element');
+        }
+
+        window.onload = () => {
+            render();
+            renderChecklist();
+        };
     </script>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
